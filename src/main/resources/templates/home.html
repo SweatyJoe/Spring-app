@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>NAME</th>
+            <th>URL</th>
+            <th>COST</th>
+        </tr>
+        <tr th:each="el : ${ipce}">
+            <td th:text="${el.getId()}"/>
+            <td th:text="${el.getName()}"/>
+            <td th:text="${el.getUrl()}"/>
+            <td th:text="${el.getCost()}"/>
+        </tr>
+    </table>
+</div>
+</body>
+</html>
