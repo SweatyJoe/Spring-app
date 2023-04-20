@@ -4,12 +4,14 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.Duration;
 
 public class OnlinerParse {
     private static String elems;
@@ -37,10 +39,14 @@ public class OnlinerParse {
                 options.addArguments("--remote-allow-origins=*");
 
                 WebDriver wDriver = new ChromeDriver(options);
-                wDriver.get(urlGen(pageIterator, "cpu"));
-
+                Duration duration = Duration.ofMillis(10000);
+                wDriver.manage().timeouts().pageLoadTimeout(duration);
+                try{
+                    wDriver.get(urlGen(pageIterator, "cpu"));
+                }catch (TimeoutException ignore){
+                }
                 Document doc = Jsoup.parse(wDriver.getPageSource());
-                Elements elements = doc.select("schema-pagination__pages-link");
+                Elements elements = doc.select("schema-product__group");
                 for(Element s : elements){
                     System.out.println(s.text());
                 }
