@@ -17,7 +17,16 @@ public class OnlinerParse {
     private static String elems;
 
     public OnlinerParse() {
-        this.sendRequest();
+        //this.sendRequest();
+        Thread th = new Thread(new OnlinerParseThread());
+        try{
+            th.join();
+            th.start();
+        } catch (InterruptedException e){
+            System.out.println("\n\nError on Start Thread\n\n");
+            e.printStackTrace();
+        }
+
     }
 
     public static String getElems() {
@@ -39,15 +48,17 @@ public class OnlinerParse {
                 options.addArguments("--remote-allow-origins=*");
 
                 WebDriver wDriver = new ChromeDriver(options);
-                Duration duration = Duration.ofMillis(10000);
+                Duration duration = Duration.ofMillis(7000);
                 wDriver.manage().timeouts().pageLoadTimeout(duration);
-                try{
+                try {
                     wDriver.get(urlGen(pageIterator, "cpu"));
-                }catch (TimeoutException ignore){
+                } catch (TimeoutException ignore) {
                 }
+
+                System.out.println(wDriver.getPageSource());
                 Document doc = Jsoup.parse(wDriver.getPageSource());
                 Elements elements = doc.select("schema-product__group");
-                for(Element s : elements){
+                for (Element s : elements) {
                     System.out.println(s.text());
                 }
                 /*Content content = Request.Get("https://app.scrapingbee.com/api/v1/?api_key=NXJ64ADCJ2ZMX77CATOTMGY2INAHJZEBQUDWPDZFDRRRNWFLRYPPF4YQFAL80RC1739BC9KHCNVVUDDV&url=" +
@@ -56,20 +67,19 @@ public class OnlinerParse {
                 */
                 //lastPage = content.toString().lastIndexOf("schema-pagination__pages-link"); //find last page
 
-                //save page as html-file
             }
         } catch (Exception e) {
             System.out.println(e);
         }
     }
 
-    private void readAndResearch(){
-        for(int i =0;;i++){
-            try{
+    private void readAndResearch() {
+        for (int i = 0; ; i++) {
+            try {
                 Document doc = Jsoup
                         .parse(new File("https://catalog.onliner.by/cpu?page=" + i));
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
