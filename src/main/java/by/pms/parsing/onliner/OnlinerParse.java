@@ -1,107 +1,43 @@
 package by.pms.parsing.onliner;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-
-import java.io.File;
-import java.io.IOException;
-import java.time.Duration;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class OnlinerParse {
     private static String elems;
 
+    /*TODO
+     *  threadPool - need some rework;
+     *  add more thread for parsing;*/
     public OnlinerParse() {
+        ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
         //this.sendRequest();
-        Thread th = new Thread(new OnlinerParseThread());
-        try{
+        OnlinerParseThread opt = new OnlinerParseThread();
+        //threadPool.submit(opt);
+        Thread th = new Thread(opt);
+        try {
+
             th.join();
             th.start();
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             System.out.println("\n\nError on Start Thread\n\n");
             e.printStackTrace();
         }
+        Map<String, String> onlinerCpuElements = opt.getCPUElements();
+        try {
+            for (var s : onlinerCpuElements.keySet()) {
+                new OnlinerCPUEntityPlaceholder(s, onlinerCpuElements.get(s));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+        System.out.println("THE END");
     }
 
     public static String getElems() {
         return elems;
     }
 
-    private static String urlGen(int pageNumber, String component) {
-        return "https://catalog.onliner.by/" + component + "?page=" + pageNumber;
-    }
-
-    private void sendRequest() {
-        try {
-            int pageIterator = 0;
-            int lastPage = 1;
-            for (; pageIterator < lastPage; pageIterator++) {
-                System.setProperty("webdriver.chrome.driver", "selenium\\chromedriver.exe");
-
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--remote-allow-origins=*");
-
-                WebDriver wDriver = new ChromeDriver(options);
-                Duration duration = Duration.ofMillis(7000);
-                wDriver.manage().timeouts().pageLoadTimeout(duration);
-                try {
-                    wDriver.get(urlGen(pageIterator, "cpu"));
-                } catch (TimeoutException ignore) {
-                }
-
-                System.out.println(wDriver.getPageSource());
-                Document doc = Jsoup.parse(wDriver.getPageSource());
-                Elements elements = doc.select("schema-product__group");
-                for (Element s : elements) {
-                    System.out.println(s.text());
-                }
-                /*Content content = Request.Get("https://app.scrapingbee.com/api/v1/?api_key=NXJ64ADCJ2ZMX77CATOTMGY2INAHJZEBQUDWPDZFDRRRNWFLRYPPF4YQFAL80RC1739BC9KHCNVVUDDV&url=" +
-                                urlGen(pageIterator, "cpu"))
-                        .execute().returnContent();
-                */
-                //lastPage = content.toString().lastIndexOf("schema-pagination__pages-link"); //find last page
-
-            }
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    private void readAndResearch() {
-        for (int i = 0; ; i++) {
-            try {
-                Document doc = Jsoup
-                        .parse(new File("https://catalog.onliner.by/cpu?page=" + i));
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /*private void getCPU() {
-        int page = 1;
-        String url = "https://catalog.onliner.by/cpu?page=" + page + "&region=gomel";
-        try {
-            Document doc = Jsoup
-                    .connect(url)
-                    //.timeout(8000)
-                    .get();
-            Elements elements = doc.select("div.schema-product__group");
-            System.out.println("size " + elements.size());
-            for (int i = 0; i < elements.size(); i++) {
-
-                System.out.println(elements.get(i).text());
-                elems = elems + elements.get(i).text();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 }
