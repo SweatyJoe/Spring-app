@@ -16,19 +16,19 @@ import java.util.Map;
 public class OnlinerParseThread implements Runnable {
     private static Map<String, String> CPUElements = new HashMap<>();
 
-    public Map<String, String> getCPUElements() {
-        return CPUElements;
-    }
-
     private static String urlGen(int pageNumber, String component) {
         return "https://catalog.onliner.by/" + component + "?page=" + pageNumber;
+    }
+
+    public Map<String, String> getCPUElements() {
+        return CPUElements;
     }
 
     @Override
     public void run() {
         try {
             int pageIterator = 1;
-            int lastPage = 2;
+            int lastPage = 1;
             for (; pageIterator < lastPage + 1; pageIterator++) {
                 System.setProperty("webdriver.chrome.driver", "selenium\\chromedriver.exe");
 
@@ -46,16 +46,15 @@ public class OnlinerParseThread implements Runnable {
                 wDriver.quit();
                 Elements elements = doc.select("a.js-product-title-link"); //js-product-title-link  //schema-product__group
                 Elements elementsIterator = doc.select("a.schema-pagination__pages-link");
-                if (elementsIterator != null | elementsIterator.size() == 0) {
+                /*if (elementsIterator != null | elementsIterator.size() == 0) {
                     if (lastPage == 2) {
                         lastPage = elementsIterator.size();
                     }
                 } else {
                     System.out.println("\n\nCant find elements for page count!\n\n");
                     return;
-                }
+                }*/
                 for (Element s : elements) {
-                    System.out.println("---   " + s.text() + " " + s.attr("href"));
                     CPUElements.put(s.text(), s.attr("href"));
                 }
             }
