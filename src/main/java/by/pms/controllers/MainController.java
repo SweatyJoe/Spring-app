@@ -1,7 +1,7 @@
 package by.pms.controllers;
 
 import by.pms.entity.ImarketParseComponents;
-import by.pms.parsing.onliner.OnlinerParse;
+import by.pms.parsing.onliner.OnlinerParseGenerator;
 import by.pms.repository.CpuRepository;
 import by.pms.repository.ImarketParseComponentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class MainController {
     @GetMapping("/")
     public String begin(Model model) {
         //new PreparseSet(imarketRepo);
-        new OnlinerParse(cpuRepository);
+        new OnlinerParseGenerator(cpuRepository);
         Iterable<ImarketParseComponents> ipce = imarketRepo.findAll();
         model.addAttribute("ipce", ipce);
         return "home";

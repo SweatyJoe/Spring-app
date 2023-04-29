@@ -82,7 +82,8 @@ public class OnlinerCPUEntityPlaceholder {
                     cpuEntityTmp[5],
                     Double.parseDouble(cpuEntityTmp[6].replace(" ГГц", "")),
                     Double.parseDouble(cpuEntityTmp[7].replace(" ГГц", "")),
-                    cpuEntityTmp[8]);
+                    cpuEntityTmp[8],
+                    cpuUrl);
         } catch (NumberFormatException wrongFormat) {
             System.out.println("Wrong format exception");
             wrongFormat.printStackTrace();

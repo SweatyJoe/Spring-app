@@ -32,8 +32,11 @@ public class CpuEntity {
     private double maxFreq;
     @NotNull
     private String memory;
+    @NotNull
+    private String url;
 
-    public CpuEntity(String name, String socket, int cors, int threads, int tdp, boolean box, String integratedGraph, double freq, double maxFreq, String memory) {
+    public CpuEntity(String name, String socket, int cors, int threads, int tdp, boolean box,
+                     String integratedGraph, double freq, double maxFreq, String memory, String url) {
         this.name = name;
         this.socket = socket;
         this.cors = cors;
@@ -44,5 +47,6 @@ public class CpuEntity {
         this.freq = freq;
         this.maxFreq = maxFreq;
         this.memory = memory;
+        this.url = url;
     }
 }

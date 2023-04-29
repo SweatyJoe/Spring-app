@@ -24,6 +24,11 @@ public class OnlinerParseThread implements Runnable {
         return CPUElements;
     }
 
+    /*TODO
+    *  MAKE web driver solo casting and send this to Thread;
+    *  try to dont quit driver and faster-load pages;
+    *
+    * */
     @Override
     public void run() {
         try {

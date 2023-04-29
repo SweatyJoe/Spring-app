@@ -4,13 +4,14 @@ import by.pms.repository.CpuRepository;
 
 import java.util.Map;
 
-public class OnlinerParse {
+public class OnlinerParseGenerator {
     private static String elems;
 
     /*TODO
      *  threadPool - need some rework;
+     * mb TP is shit...
      *  add more thread for parsing;*/
-    public OnlinerParse(CpuRepository repository) {
+    public OnlinerParseGenerator(CpuRepository repository) {
         //ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
         //this.sendRequest();
         OnlinerParseThread opt = new OnlinerParseThread();
