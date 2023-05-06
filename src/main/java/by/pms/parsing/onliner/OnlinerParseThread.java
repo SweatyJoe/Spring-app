@@ -25,7 +25,7 @@ public class OnlinerParseThread implements Runnable {
     }
 
     /*TODO
-    *  MAKE web driver solo casting and send this to Thread;
+    *  MAKE web driver "solo casting" and send this to Thread;
     *  try to dont quit driver and faster-load pages;
     *
     * */
@@ -41,8 +41,7 @@ public class OnlinerParseThread implements Runnable {
                 options.addArguments("--remote-allow-origins=*"); //, "--no-startup-window"
 
                 WebDriver wDriver = new ChromeDriver(options);
-                Duration duration = Duration.ofMillis(8000);
-                wDriver.manage().timeouts().pageLoadTimeout(duration);
+                wDriver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(8000));
                 try {
                     wDriver.get(urlGen(pageIterator, "cpu"));
                 } catch (TimeoutException ignore) {
