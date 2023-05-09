@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Optional;
 
@@ -27,8 +27,8 @@ public class MainController {
         return "home";
     }
 
-    @PostMapping("/info/{name}")
-    public String infos(Model model, String name) {
+    @GetMapping("/info/{name}")
+    public String infos(Model model, @PathVariable String name) {
         try {
             Optional<CpuEntity> result = cpuRepository.findByNameLikeIgnoreCase(name);
             model.addAttribute("result", result);

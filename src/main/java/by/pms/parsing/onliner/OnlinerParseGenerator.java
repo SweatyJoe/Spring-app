@@ -4,13 +4,16 @@ import by.pms.repository.CpuRepository;
 
 import java.util.Map;
 
+/**
+ * Класс отвечает за создание потоков (по только 1)
+ * */
 public class OnlinerParseGenerator {
     private static String elems;
 
     /*TODO
-     *  threadPool - need some rework;
+     * threadPool - need some rework;
      * mb TP is shit...
-     *  add more thread for parsing;*/
+     * add more thread for parsing;*/
     public OnlinerParseGenerator(CpuRepository repository) {
         //ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
         //this.sendRequest();

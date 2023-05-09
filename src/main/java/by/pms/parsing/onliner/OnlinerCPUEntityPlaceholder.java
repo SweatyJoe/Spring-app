@@ -2,7 +2,6 @@ package by.pms.parsing.onliner;
 
 import by.pms.entity.CpuEntity;
 import by.pms.repository.CpuRepository;
-import jakarta.validation.constraints.NotNull;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -14,6 +13,14 @@ import org.springframework.transaction.TransactionSystemException;
 import java.time.Duration;
 import java.util.Objects;
 
+/**
+ * Класс-заполнитель, овечает за зполнение базы данных
+ * данными на основе класса @CpuEntity.
+ * @cpuName - наименование цпу;
+ * @cpuUrl - ссылка на цпу;
+ * @repository - объект репозитория для доступа к бд.
+ * */
+
 public class OnlinerCPUEntityPlaceholder {
     private static final String[][] CPU_SPEC = {{"socket", "cors", "threads", "tdp", "box", "integratedGraph", "freq", "maxFreq", "memory"}
             , {"Сокет", "Количество ядер", "Максимальное количество потоков", "Расчетная тепловая мощность (TDP)",
@@ -22,7 +29,7 @@ public class OnlinerCPUEntityPlaceholder {
     private final String cpuUrl;
     private final CpuRepository cpuRepository;
 
-    public OnlinerCPUEntityPlaceholder(@NotNull String cpuName, @NotNull String cpuUrl, CpuRepository repository) {
+    public OnlinerCPUEntityPlaceholder(String cpuName, String cpuUrl, CpuRepository repository) {
         this.cpuName = cpuName;
         this.cpuUrl = cpuUrl;
         this.cpuRepository = repository;
@@ -70,7 +77,7 @@ public class OnlinerCPUEntityPlaceholder {
                     }
                 }
             }
-            if (cpuEntityTmp[5] == null) {
+            if (cpuEntityTmp[5].isBlank()) {
                 cpuEntityTmp[5] = "Нет";
             }
             entity = new CpuEntity(cpuName,

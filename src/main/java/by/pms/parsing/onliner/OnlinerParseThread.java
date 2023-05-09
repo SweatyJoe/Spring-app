@@ -13,8 +13,11 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Класс-поток, занимается парсингом, генерацией ссылок.
+ * */
 public class OnlinerParseThread implements Runnable {
-    private static Map<String, String> CPUElements = new HashMap<>();
+    private static final Map<String, String> CPUElements = new HashMap<>();
 
     private static String urlGen(int pageNumber, String component) {
         return "https://catalog.onliner.by/" + component + "?page=" + pageNumber;
@@ -25,10 +28,10 @@ public class OnlinerParseThread implements Runnable {
     }
 
     /*TODO
-    *  MAKE web driver "solo casting" and send this to Thread;
-    *  try to dont quit driver and faster-load pages;
-    *
-    * */
+     *  MAKE web driver "solo casting" and send this to Thread;
+     *  try to dont quit driver and faster-load pages;
+     *  сделать массив из component
+     * */
     @Override
     public void run() {
         try {
