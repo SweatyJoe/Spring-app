@@ -1,12 +1,16 @@
 package by.pms.parsing.onliner;
 
 import by.pms.repository.CpuRepository;
+import by.pms.repository.DramRepository;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.*;
 
 /**
- * Класс отвечает за создание потоков (по только 1)
- * */
+ * Класс отвечает за создание потоков (пока только 1)
+ * и запуск заполнителя бд для цпу
+ */
 public class OnlinerParseGenerator {
     private static String elems;
 
@@ -14,39 +18,33 @@ public class OnlinerParseGenerator {
      * threadPool - need some rework;
      * mb TP is shit...
      * add more thread for parsing;*/
-    public OnlinerParseGenerator(CpuRepository repository) {
-        //ExecutorService threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() + 1);
-        //this.sendRequest();
-        OnlinerParseThread opt = new OnlinerParseThread();
-        Thread th = new Thread(opt);
-        th.setName("parsing-thread-only");
-        if (th.isAlive()) return;
-        try {
-            th.join();
-            th.start();
-        } catch (InterruptedException e) {
-            System.out.println("\n\nError on Start Thread\n\n");
-            e.printStackTrace();
+    public OnlinerParseGenerator(CpuRepository cpuRepository, DramRepository dramRepository) {
+        List<OnlinerParseThread> threadList = new ArrayList<>();
+        for (int i = 0; i < 9; i++) {
+            threadList.add(new OnlinerParseThread(i));
         }
-        try {
-            while (th.isAlive()) {
-                Thread.sleep(100);
+        ThreadFactory threadFactory = Executors.defaultThreadFactory();
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 800, 100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), threadFactory);
+        for (var s : threadList) {
+            pool.execute(s);
+        }
+        pool.shutdown();
+        while (pool.getActiveCount() != 0) {
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
 
-        Map<String, String> onlinerCpuElements = opt.getCPUElements();
-        try {
-            for (var s : onlinerCpuElements.keySet()) {
-                System.out.println("S: [" + s + "]  [" + onlinerCpuElements.get(s) + "]");
-                new OnlinerCPUEntityPlaceholder(s, onlinerCpuElements.get(s), repository);
+        for (var item : threadList.get(0).getCPUElements().keySet()) {
+            if (item.contains("Процессор ")) {
+                new OnlinerCPUEntityPlaceholder(item, threadList.get(0).getCPUElements().get(item), cpuRepository);
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            if (item.contains("Оперативная память ")) {
+                new OnlinerDramEntityPlaceholder(item, threadList.get(0).getCPUElements().get(item), dramRepository);
+            }
         }
-
-        System.out.println("THE END");
     }
 
     public static String getElems() {

@@ -17,18 +17,13 @@ public class CpuEntity {
     private String name;
     @NotNull
     private String socket;
-    @NotNull
     private int cors;
-    @NotNull
     private int threads;
-    @NotNull
     private int tdp;
     private boolean box;
     @NotNull
     private String integratedGraph;
-    @NotNull
     private double freq;
-    @NotNull
     private double maxFreq;
     @NotNull
     private String memory;

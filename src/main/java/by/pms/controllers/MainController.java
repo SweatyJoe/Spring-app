@@ -1,8 +1,8 @@
 package by.pms.controllers;
 
 import by.pms.entity.CpuEntity;
+import by.pms.parsing.onliner.OnlinerParseGenerator;
 import by.pms.repository.CpuRepository;
-import by.pms.repository.ImarketParseComponentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +14,12 @@ import java.util.Optional;
 @Controller
 public class MainController {
     @Autowired
-    private ImarketParseComponentsRepository imarketRepo;
-    @Autowired
     private CpuRepository cpuRepository;
 
 
     @GetMapping("/")
     public String begin(Model model) {
-        //new OnlinerParseGenerator(cpuRepository);
+        new OnlinerParseGenerator(cpuRepository);
         Iterable<CpuEntity> ipce = cpuRepository.findAll();
         model.addAttribute("ipce", ipce);
         return "home";
@@ -39,5 +37,12 @@ public class MainController {
             model.addAttribute("ipce", ipce);
         }
         return "home";
+    }
+
+    @GetMapping("/information")
+    public String information_sequence(Model model) {
+        Iterable<CpuEntity> ipce = cpuRepository.findAll();
+        model.addAttribute("ipce", ipce);
+        return "information_sequence";
     }
 }
