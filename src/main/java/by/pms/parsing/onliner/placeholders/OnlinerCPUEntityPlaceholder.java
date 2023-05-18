@@ -1,4 +1,4 @@
-package by.pms.parsing.onliner;
+package by.pms.parsing.onliner.placeholders;
 
 import by.pms.entity.CpuEntity;
 import by.pms.parsing.WebDriverStarter;

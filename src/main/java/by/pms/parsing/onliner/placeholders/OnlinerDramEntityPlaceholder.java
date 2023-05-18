@@ -1,4 +1,4 @@
-package by.pms.parsing.onliner;
+package by.pms.parsing.onliner.placeholders;
 
 import by.pms.entity.DramEntity;
 import by.pms.parsing.WebDriverStarter;
@@ -22,6 +22,7 @@ public class OnlinerDramEntityPlaceholder {
         this.dramName = dramName;
         this.url = url;
         this.repository = repository;
+        fill();
     }
 
     private void fill() {
@@ -36,9 +37,7 @@ public class OnlinerDramEntityPlaceholder {
     }
 
     private DramEntity urlConvertToEntity() {
-
-        String[] dramEntityTmp = new String[15];
-
+        String[] dramEntityTmp = new String[13];
         Document doc = Jsoup.parse(WebDriverStarter.start(url));
         Elements allTables = doc.select("td");
         if (allTables == null) return null;

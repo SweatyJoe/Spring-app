@@ -1,5 +1,7 @@
 package by.pms.parsing.onliner;
 
+import by.pms.parsing.onliner.placeholders.OnlinerCPUEntityPlaceholder;
+import by.pms.parsing.onliner.placeholders.OnlinerDramEntityPlaceholder;
 import by.pms.repository.CpuRepository;
 import by.pms.repository.DramRepository;
 
