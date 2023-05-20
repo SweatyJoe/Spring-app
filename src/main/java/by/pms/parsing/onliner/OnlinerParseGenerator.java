@@ -2,25 +2,26 @@ package by.pms.parsing.onliner;
 
 import by.pms.parsing.onliner.placeholders.OnlinerCPUEntityPlaceholder;
 import by.pms.parsing.onliner.placeholders.OnlinerDramEntityPlaceholder;
+import by.pms.parsing.onliner.placeholders.OnlinerPowerSupplyPlaceholder;
+import by.pms.parsing.onliner.placeholders.OnlinerSsdPlaceholder;
 import by.pms.repository.CpuRepository;
 import by.pms.repository.DramRepository;
+import by.pms.repository.PowerSupplyRepository;
+import by.pms.repository.SsdRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
 
 /**
- * Класс отвечает за создание потоков (пока только 1)
- * и запуск заполнителя бд для цпу
+ * Класс отвечает за создание потоков
+ * и запуск заполнителя бд характеристик комопнентов
  */
 public class OnlinerParseGenerator {
     private static String elems;
 
-    /*TODO
-     * threadPool - need some rework;
-     * mb TP is shit...
-     * add more thread for parsing;*/
-    public OnlinerParseGenerator(CpuRepository cpuRepository, DramRepository dramRepository) {
+    public OnlinerParseGenerator(CpuRepository cpuRepository, DramRepository dramRepository,
+                                 PowerSupplyRepository supplyRepository, SsdRepository ssdRepository) {
         List<OnlinerParseThread> threadList = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             threadList.add(new OnlinerParseThread(i));
@@ -45,6 +46,12 @@ public class OnlinerParseGenerator {
             }
             if (item.contains("Оперативная память ")) {
                 new OnlinerDramEntityPlaceholder(item, threadList.get(0).getCPUElements().get(item), dramRepository);
+            }
+            if (item.contains("Блок питания ")) {
+                new OnlinerPowerSupplyPlaceholder(item, threadList.get(0).getCPUElements().get(item), supplyRepository);
+            }
+            if (item.contains("SSD ")) {
+                new OnlinerSsdPlaceholder(item, threadList.get(0).getCPUElements().get(item), ssdRepository);
             }
         }
     }

@@ -14,9 +14,9 @@ public class OnlinerDramEntityPlaceholder {
             "CAS Latency ", "Тайминги ", "Напряжение питания ", "Профили XMP ",
             "Охлаждение ", "Низкопрофильный модуль ", "Подсветка элементов платы"
     };
-    private String dramName;
-    private String url;
-    private DramRepository repository;
+    private final String dramName;
+    private final String url;
+    private final DramRepository repository;
 
     public OnlinerDramEntityPlaceholder(String dramName, String url, DramRepository repository) {
         this.dramName = dramName;
@@ -37,25 +37,29 @@ public class OnlinerDramEntityPlaceholder {
     }
 
     private DramEntity urlConvertToEntity() {
-        String[] dramEntityTmp = new String[13];
+        String[] dramEntityTmp = new String[14];
         Document doc = Jsoup.parse(WebDriverStarter.start(url));
         Elements allTables = doc.select("td");
-        if (allTables == null) return null;
-        for (int j = 0; j < 13; j++) {
-            for (int i = 0; i < allTables.size(); i++) {
-                if (allTables.get(i).text().contains(DRAM_SPEC[j])) {
-                    if (j == 4 || j == 11 || j == 12) {
-                        if (allTables.get(i + 1).attr("class").equals("i-x")) dramEntityTmp[j] = "true";
-                        else dramEntityTmp[j] = "false";
+        try {
+            for (int j = 0; j < 13; j++) {
+                for (int i = 0; i < allTables.size(); i++) {
+                    if (allTables.get(i).text().contains(DRAM_SPEC[j])) {
+                        if (j == 4 || j == 11 || j == 12) {
+                            if (allTables.get(i + 1).attr("class").equals("i-x")) dramEntityTmp[j] = "true";
+                            else dramEntityTmp[j] = "false";
+                            i++;
+                            continue;
+                        }
+                        if (allTables.get(i + 1).text() == null) {
+                            dramEntityTmp[j] = "null";
+                        } else dramEntityTmp[j] = allTables.get(i + 1).text();
                         i++;
-                        continue;
                     }
-                    if (allTables.get(i + 1).text() == null) {
-                        dramEntityTmp[j] = "null";
-                    } else dramEntityTmp[j] = allTables.get(i + 1).text();
-                    i++;
                 }
             }
+        } catch (NullPointerException e) {
+            System.out.println("DRAM Found null: can't find \"td\"");
+            return null;
         }
         try {
             if (dramEntityTmp[10] == null) {

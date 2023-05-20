@@ -60,9 +60,8 @@ public class OnlinerCPUEntityPlaceholder {
                 for (int i = 0; i < allTables.size(); i++) {
                     if (allTables.get(i).text().contains(CPU_SPEC[1][j])) {
                         if (allTables.get(i + 1).text() == null) {
-                            cpuEntityTmp[j] = "null";
+                            cpuEntityTmp[j] = "0";
                         } else cpuEntityTmp[j] = allTables.get(i + 1).text();
-                        i++;
                     }
                 }
             }

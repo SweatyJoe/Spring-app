@@ -67,26 +67,27 @@ public class OnlinerPowerSupplyPlaceholder {
         if (allTables == null) return null;
         for (int j = 0; j < 25; j++) {
             for (int i = 0; i < allTables.size(); i++) {
-                powerEntityTmp[j] = "false";
                 if (allTables.get(i).text().contains(POWER_SPEC[j])) {
                     if (allTables.get(i + 1).text() == null) {
-                        if (Objects.equals(allTables.get(i + 1).attr("class"), "i-tip"))
+                        if (Objects.equals(allTables.get(i + 1).attr("class"), "i-tip")){
                             powerEntityTmp[j] = "true";
+                            break;
+                        }
                     } else {
                         powerEntityTmp[j] = allTables.get(i + 1).text();
                     }
-                    i++;
                 }
             }
+            if (powerEntityTmp[j] == null) powerEntityTmp[j] = "0";
         }
         try {
             return new PowerSupplyEntity(
                     powerSupplyName,
                     powerEntityTmp[0],
-                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "")),
+                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "").replace(" ","")),
                     powerEntityTmp[2],
                     Integer.parseInt(powerEntityTmp[3].replace(" мм", "")),
-                    Integer.parseInt(powerEntityTmp[4].replace(" мм", "")),
+                    Double.parseDouble(powerEntityTmp[4].replace(" мм", "")),
                     Integer.parseInt(powerEntityTmp[5].replace(" мм", "")),
                     powerEntityTmp[6],
                     Integer.parseInt(powerEntityTmp[7]),

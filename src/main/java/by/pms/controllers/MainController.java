@@ -3,6 +3,8 @@ package by.pms.controllers;
 import by.pms.entity.CpuEntity;
 import by.pms.parsing.onliner.OnlinerParseGenerator;
 import by.pms.repository.CpuRepository;
+import by.pms.repository.DramRepository;
+import by.pms.repository.PowerSupplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +17,13 @@ import java.util.Optional;
 public class MainController {
     @Autowired
     private CpuRepository cpuRepository;
+    private DramRepository dramRepository;
+    private PowerSupplyRepository supplyRepository;
 
 
     @GetMapping("/")
     public String begin(Model model) {
-        new OnlinerParseGenerator(cpuRepository);
+        new OnlinerParseGenerator(cpuRepository, dramRepository, supplyRepository);
         Iterable<CpuEntity> ipce = cpuRepository.findAll();
         model.addAttribute("ipce", ipce);
         return "home";
