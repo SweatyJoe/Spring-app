@@ -27,7 +27,8 @@ public class OnlinerParseGenerator {
             threadList.add(new OnlinerParseThread(i));
         }
         ThreadFactory threadFactory = Executors.defaultThreadFactory();
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 800, 100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), threadFactory);
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 800,
+                100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), threadFactory);
         for (var s : threadList) {
             pool.execute(s);
         }
