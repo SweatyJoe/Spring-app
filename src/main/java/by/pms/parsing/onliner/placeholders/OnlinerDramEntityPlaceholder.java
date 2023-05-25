@@ -41,36 +41,33 @@ public class OnlinerDramEntityPlaceholder {
         Document doc = Jsoup.parse(WebDriverStarter.start(url));
         Elements allTables = doc.select("td");
         try {
-            for (int j = 0; j < 13; j++) {
+            for (int j = 0; j < 14; j++) {
                 for (int i = 0; i < allTables.size(); i++) {
                     if (allTables.get(i).text().contains(DRAM_SPEC[j])) {
                         if (j == 4 || j == 11 || j == 12) {
                             if (allTables.get(i + 1).attr("class").equals("i-x")) dramEntityTmp[j] = "true";
-                            else dramEntityTmp[j] = "false";
-                            i++;
-                            continue;
+                            break;
                         }
-                        if (allTables.get(i + 1).text() == null) {
-                            dramEntityTmp[j] = "null";
-                        } else dramEntityTmp[j] = allTables.get(i + 1).text();
-                        i++;
+                        if (allTables.get(i + 1).text() != null) {
+                            dramEntityTmp[j] = allTables.get(i + 1).text();
+                            break;
+                        }
                     }
                 }
+                if (j == 1 && dramEntityTmp[1].contains("Мб"))
+                    dramEntityTmp[1] = "0." + dramEntityTmp[1].replace(" Мб", "");
+                if (dramEntityTmp[j] == null || dramEntityTmp[j].isEmpty()) dramEntityTmp[j] = "0";
             }
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
             System.out.println("DRAM Found null: can't find \"td\"");
             return null;
         }
         try {
-            if (dramEntityTmp[10] == null) {
-                dramEntityTmp[10] = "0";
-            }
-
             return new DramEntity(
                     dramName,
                     dramEntityTmp[0],
-                    Integer.parseInt(dramEntityTmp[1]),
-                    Integer.parseInt(dramEntityTmp[2]),
+                    Double.parseDouble(dramEntityTmp[1].replace(" ГБ", "")),
+                    Integer.parseInt(dramEntityTmp[2].replace(" ГБ", "")),
                     dramEntityTmp[3],
                     Boolean.parseBoolean(dramEntityTmp[4]),
                     Integer.parseInt(dramEntityTmp[5].replace(" МГц", "")),
@@ -78,7 +75,7 @@ public class OnlinerDramEntityPlaceholder {
                     Double.parseDouble(dramEntityTmp[7].replace("T", "")),
                     dramEntityTmp[8],
                     Double.parseDouble(dramEntityTmp[9].replace(" В", "")),
-                    Double.parseDouble(dramEntityTmp[10]),
+                    Double.parseDouble(dramEntityTmp[10].replace("(", "").replace(")", "")),
                     Boolean.parseBoolean(dramEntityTmp[11]),
                     Boolean.parseBoolean(dramEntityTmp[12]),
                     dramEntityTmp[13]

@@ -1,13 +1,6 @@
 package by.pms.parsing.onliner;
 
-import by.pms.parsing.onliner.placeholders.OnlinerCPUEntityPlaceholder;
-import by.pms.parsing.onliner.placeholders.OnlinerDramEntityPlaceholder;
-import by.pms.parsing.onliner.placeholders.OnlinerPowerSupplyPlaceholder;
-import by.pms.parsing.onliner.placeholders.OnlinerSsdPlaceholder;
-import by.pms.repository.CpuRepository;
-import by.pms.repository.DramRepository;
-import by.pms.repository.PowerSupplyRepository;
-import by.pms.repository.SsdRepository;
+import by.pms.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +12,28 @@ import java.util.concurrent.*;
  */
 public class OnlinerParseGenerator {
     private static String elems;
+    private CpuRepository cpuRepository;
+    private DramRepository dramRepository;
+    private PowerSupplyRepository supplyRepository;
+    private SsdRepository ssdRepository;
+    private VideoCardRepository videoCardRepository;
 
     public OnlinerParseGenerator(CpuRepository cpuRepository, DramRepository dramRepository,
-                                 PowerSupplyRepository supplyRepository, SsdRepository ssdRepository) {
+                                 PowerSupplyRepository supplyRepository, SsdRepository ssdRepository,
+                                 VideoCardRepository videoCardRepository) {
+        this.cpuRepository = cpuRepository;
+        this.dramRepository = dramRepository;
+        this.supplyRepository = supplyRepository;
+        this.ssdRepository = ssdRepository;
+        this.videoCardRepository = videoCardRepository;
+        startValidating();
+    }
+
+    public static String getElems() {
+        return elems;
+    }
+
+    private void startValidating() {
         List<OnlinerParseThread> threadList = new ArrayList<>();
         for (int i = 0; i < 9; i++) {
             threadList.add(new OnlinerParseThread(i));
@@ -35,30 +47,40 @@ public class OnlinerParseGenerator {
         pool.shutdown();
         while (pool.getActiveCount() != 0) {
             try {
-                Thread.sleep(200);
+                Thread.sleep(300);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
+        ThreadPoolExecutor newPool = new ThreadPoolExecutor(7, 14,
+                100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), Executors.defaultThreadFactory());
+        List<OnlinerComponentsValidating> validatingList = new ArrayList<>();
         for (var item : threadList.get(0).getCPUElements().keySet()) {
-            if (item.contains("Процессор ")) {
-                new OnlinerCPUEntityPlaceholder(item, threadList.get(0).getCPUElements().get(item), cpuRepository);
+            validatingList.add(new OnlinerComponentsValidating(item, threadList.get(0).getCPUElements().get(item),
+                    cpuRepository, dramRepository, supplyRepository, ssdRepository, videoCardRepository));
+        }
+        try {
+            for (var list : validatingList) {
+                try {
+                    newPool.execute(list);
+                } catch (Exception e) {
+                    System.out.println("Thread must be rejected. ID [" + list.getItem() + "]");
+                    continue;
+                }
+                Thread.sleep(500);
             }
-            if (item.contains("Оперативная память ")) {
-                new OnlinerDramEntityPlaceholder(item, threadList.get(0).getCPUElements().get(item), dramRepository);
-            }
-            if (item.contains("Блок питания ")) {
-                new OnlinerPowerSupplyPlaceholder(item, threadList.get(0).getCPUElements().get(item), supplyRepository);
-            }
-            if (item.contains("SSD ")) {
-                new OnlinerSsdPlaceholder(item, threadList.get(0).getCPUElements().get(item), ssdRepository);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        newPool.shutdown();
+        while (newPool.getActiveCount() != 0) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
-    }
-
-    public static String getElems() {
-        return elems;
     }
 
 }

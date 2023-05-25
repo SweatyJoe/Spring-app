@@ -17,7 +17,7 @@ public class DramEntity {
     private String name;
     @NotNull
     private String kit;
-    private int totalCapacity;
+    private double totalCapacity;
     private int capacity;
     @NotNull
     private String type;
@@ -33,7 +33,7 @@ public class DramEntity {
     private boolean lowProfileModule;
     private String light;
 
-    public DramEntity(@NotNull String name, @NotNull String kit, int totalCapacity, int capacity, @NotNull String type,
+    public DramEntity(@NotNull String name, @NotNull String kit, double totalCapacity, int capacity, @NotNull String type,
                       boolean ecc, int frequency, @NotNull String pcIndex, double latency, String timing,
                       double voltage, double xmp, boolean cooling, boolean lowProfileModule, String light) {
         this.name = name;

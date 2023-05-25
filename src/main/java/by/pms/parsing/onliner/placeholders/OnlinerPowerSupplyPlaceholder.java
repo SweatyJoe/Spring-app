@@ -68,13 +68,17 @@ public class OnlinerPowerSupplyPlaceholder {
         for (int j = 0; j < 25; j++) {
             for (int i = 0; i < allTables.size(); i++) {
                 if (allTables.get(i).text().contains(POWER_SPEC[j])) {
-                    if (allTables.get(i + 1).text() == null) {
-                        if (Objects.equals(allTables.get(i + 1).attr("class"), "i-tip")){
-                            powerEntityTmp[j] = "true";
-                            break;
+                    try{
+                        if (allTables.get(i + 1).text() == null) {
+                            if (Objects.equals(allTables.get(i + 1).attr("class"), "i-tip")){
+                                powerEntityTmp[j] = "true";
+                                break;
+                            }
+                        } else {
+                            powerEntityTmp[j] = allTables.get(i + 1).text();
                         }
-                    } else {
-                        powerEntityTmp[j] = allTables.get(i + 1).text();
+                    } catch (IndexOutOfBoundsException oops){
+                        break;
                     }
                 }
             }
@@ -84,11 +88,11 @@ public class OnlinerPowerSupplyPlaceholder {
             return new PowerSupplyEntity(
                     powerSupplyName,
                     powerEntityTmp[0],
-                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "").replace(" ","")),
+                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "").replace(" ","").replaceAll("\\(.+\\)", "")),
                     powerEntityTmp[2],
-                    Integer.parseInt(powerEntityTmp[3].replace(" мм", "")),
+                    Double.parseDouble(powerEntityTmp[3].replace(" мм", "")),
                     Double.parseDouble(powerEntityTmp[4].replace(" мм", "")),
-                    Integer.parseInt(powerEntityTmp[5].replace(" мм", "")),
+                    Double.parseDouble(powerEntityTmp[5].replace(" мм", "")),
                     powerEntityTmp[6],
                     Integer.parseInt(powerEntityTmp[7]),
                     Double.parseDouble(powerEntityTmp[8].replace(" А", "")),

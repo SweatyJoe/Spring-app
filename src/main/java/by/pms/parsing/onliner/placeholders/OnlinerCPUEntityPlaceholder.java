@@ -44,7 +44,7 @@ public class OnlinerCPUEntityPlaceholder {
             try {
                 cpuRepository.save(entity);
             } catch (TransactionSystemException transactionSystemException) {
-                System.out.println("-|- Transaction Exception");
+                System.out.println("Transaction Exception.");
             }
         }
     }
@@ -59,11 +59,10 @@ public class OnlinerCPUEntityPlaceholder {
             for (int j = 0; j < 9; j++) {
                 for (int i = 0; i < allTables.size(); i++) {
                     if (allTables.get(i).text().contains(CPU_SPEC[1][j])) {
-                        if (allTables.get(i + 1).text() == null) {
-                            cpuEntityTmp[j] = "0";
-                        } else cpuEntityTmp[j] = allTables.get(i + 1).text();
+                        cpuEntityTmp[j] = allTables.get(i + 1).text();
                     }
                 }
+                if (cpuEntityTmp[j] == null) cpuEntityTmp[j] = "0";
             }
             entity = new CpuEntity(cpuName,
                     cpuEntityTmp[0],
@@ -73,7 +72,7 @@ public class OnlinerCPUEntityPlaceholder {
                     !Objects.equals(cpuEntityTmp[4], "OEM"),
                     cpuEntityTmp[5],
                     Double.parseDouble(cpuEntityTmp[6].replace(" ГГц", "")),
-                    Double.parseDouble(cpuEntityTmp[7].replace(" ГГц", "")),
+                    Double.parseDouble(cpuEntityTmp[7].replace(" ГГц", "").replaceAll("\\(.+\\)", "")),
                     cpuEntityTmp[8],
                     cpuUrl);
         } catch (NumberFormatException wrongFormat) {

@@ -1,15 +1,11 @@
 package by.pms.parsing.onliner;
 
+import by.pms.parsing.WebDriverStarter;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
-import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,38 +35,17 @@ public class OnlinerParseThread implements Runnable {
         return "https://catalog.onliner.by/" + component + "?page=" + pageNumber;
     }
 
-    public int getComponentId() {
-        return componentId;
-    }
-
     public Map<String, String> getCPUElements() {
         return CPUElements;
     }
 
-    /*TODO
-     *  MAKE web driver "solo casting" and send this to Thread;
-     *  try to dont quit driver and faster-load pages;
-     *  сделать массив из component
-     * */
     @Override
     public void run() {
         try {
             int pageIterator = 1;
             int lastPage = 2;
             for (; pageIterator < lastPage + 1; pageIterator++) {
-                System.setProperty("webdriver.chrome.driver", "selenium\\chromedriver.exe");
-
-                ChromeOptions options = new ChromeOptions();
-                options.addArguments("--remote-allow-origins=*"); //, "--no-startup-window"
-
-                WebDriver wDriver = new ChromeDriver(options);
-                wDriver.manage().timeouts().pageLoadTimeout(Duration.ofMillis(8000));
-                try {
-                    wDriver.get(urlGen(pageIterator, components[componentId]));
-                } catch (TimeoutException ignore) {
-                }
-                Document doc = Jsoup.parse(wDriver.getPageSource());
-                wDriver.quit();
+                Document doc = Jsoup.parse(WebDriverStarter.start(urlGen(pageIterator, components[componentId])));
                 Elements elements = doc.select("a.js-product-title-link"); //js-product-title-link  //schema-product__group
                 Elements elementsIterator = doc.select("a.schema-pagination__pages-link");
                 if (elementsIterator != null | elementsIterator.size() == 0) {

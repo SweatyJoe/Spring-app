@@ -22,9 +22,9 @@ public class PowerSupplyEntity {
     private int power;
     @NotNull
     private String powerRange;
-    private int height;
+    private double height;
     private double width;
-    private int depth;
+    private double depth;
 
     private String standard;
     private int v12Lines;
@@ -47,8 +47,8 @@ public class PowerSupplyEntity {
     private String pci16pin;
     private boolean usbPower;
 
-    public PowerSupplyEntity(@NotNull String name, @NotNull String appointment, int power, @NotNull String powerRange, int height,
-                             double width, int depth, String standard, int v12Lines, double v12AmperageMax,
+    public PowerSupplyEntity(@NotNull String name, @NotNull String appointment, int power, @NotNull String powerRange, double height,
+                             double width, double depth, String standard, int v12Lines, double v12AmperageMax,
                              double v12CombinePower, String PFC, String certificate, String fanSize,
                              boolean light, boolean moduleConnection, String motherPower, String cpu4pin,
                              String cpu8pin, String fdd4pin, String ide4pin, String sata, String pci6pin,

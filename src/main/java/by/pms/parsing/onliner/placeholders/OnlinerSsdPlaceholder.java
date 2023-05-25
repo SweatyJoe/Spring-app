@@ -40,33 +40,42 @@ public class OnlinerSsdPlaceholder {
     }
 
     private void fill() {
-        SsdEntity entity = urlConvertToToEntity();
+        if(repository.findByNameLikeIgnoreCase(ssdName).isEmpty()){
+            SsdEntity entity = urlConvertToToEntity();
+            try{
+                repository.save(entity);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
     }
 
     private SsdEntity urlConvertToToEntity() {
-        String[] ssdEntityTmp = new String[19];
+        String[] ssdEntityTmp = new String[18];
         Document doc = Jsoup.parse(WebDriverStarter.start(url));
         Elements allTables = doc.select("td");
         if (allTables == null) return null;
-        for (int j = 0; j < 19; j++) {
-            ssdEntityTmp[j] = "0";
+        for (int j = 0; j < 18; j++) {
             for (int i = 0; i < allTables.size(); i++) {
-                if (SSD_SPEC[j].equals(allTables.get(i).text())) {
-                    if (allTables.get(i).text().contains(SSD_SPEC[j])) {
-                        if (allTables.get(i + 1).attr("class").equals("i-tip") && allTables.get(i + 1) == null) {
-                            ssdEntityTmp[j] = "true";
-                            break;
-                        }
-                        ssdEntityTmp[j] = allTables.get(i + 1).text();
+                if (allTables.get(i).text().contains(SSD_SPEC[j])) {
+                    if (allTables.get(i + 1).attr("class").equals("i-tip") && allTables.get(i + 1) == null) {
+                        ssdEntityTmp[j] = "true";
                         break;
                     }
+                    if(allTables.get(i+1).text() == null){
+                        ssdEntityTmp[j] = "0";
+                    }else {
+                        ssdEntityTmp[j] = allTables.get(i + 1).text();
+                    }
+                    break;
                 }
             }
+            if (ssdEntityTmp[j] == null) ssdEntityTmp[j] = "0";
         }
         try {
             return new SsdEntity(
                     ssdName,
-                    Double.parseDouble(ssdEntityTmp[0].replace(" ГБ", "")),
+                    Double.parseDouble(ssdEntityTmp[0].replace(" ГБ", "").replace(" ТБ", "000").replace(".", "")),
                     ssdEntityTmp[1],
                     ssdEntityTmp[2],
                     ssdEntityTmp[3],
@@ -74,14 +83,14 @@ public class OnlinerSsdPlaceholder {
                     Integer.parseInt(ssdEntityTmp[5]),
                     ssdEntityTmp[6],
                     ssdEntityTmp[7],
-                    Integer.parseInt(ssdEntityTmp[8].replace(" МБайт/с", "").replace(" ", "")),
+                    Integer.parseInt(ssdEntityTmp[8].replace(" МБайт/с", "").replace(" ", "").replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(ssdEntityTmp[9].replace(" МБайт/с", "").replace(" ", "")),
-                    Integer.parseInt(ssdEntityTmp[10].replace(" IOps", "").replace(" ", "")),
+                    Integer.parseInt(ssdEntityTmp[10].replace(" IOps", "").replace(" ", "").replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(ssdEntityTmp[11].replace(" IOps", "").replace(" ", "")),
-                    Double.parseDouble(ssdEntityTmp[12].replace(" Вт", "")),
-                    Double.parseDouble(ssdEntityTmp[13].replace(" Вт", "")),
+                    Double.parseDouble(ssdEntityTmp[12].replace(" Вт", "").replaceAll("\\(.+\\)", "")),
+                    Double.parseDouble(ssdEntityTmp[13].replace(" Вт", "").replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(ssdEntityTmp[14].replace("ч", "").replace(" ", "")),
-                    Double.parseDouble(ssdEntityTmp[15].replace(" мм", "")),
+                    Double.parseDouble(ssdEntityTmp[15].replace(" мм", "").replaceAll("\\(.+\\)", "")),
                     Boolean.parseBoolean(ssdEntityTmp[16]),
                     Boolean.parseBoolean(ssdEntityTmp[17])
             );

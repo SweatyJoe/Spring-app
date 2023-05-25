@@ -2,9 +2,7 @@ package by.pms.controllers;
 
 import by.pms.entity.CpuEntity;
 import by.pms.parsing.onliner.OnlinerParseGenerator;
-import by.pms.repository.CpuRepository;
-import by.pms.repository.DramRepository;
-import by.pms.repository.PowerSupplyRepository;
+import by.pms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +15,25 @@ import java.util.Optional;
 public class MainController {
     @Autowired
     private CpuRepository cpuRepository;
+    @Autowired
     private DramRepository dramRepository;
+    @Autowired
     private PowerSupplyRepository supplyRepository;
+    @Autowired
+    private SsdRepository ssdRepository;
+    @Autowired
+    private VideoCardRepository videoCardRepository;
 
 
     @GetMapping("/")
+    public String defaultMapping(Model model){
+
+        return "home";
+    }
+
+    @GetMapping("/update")
     public String begin(Model model) {
-        new OnlinerParseGenerator(cpuRepository, dramRepository, supplyRepository);
+        new OnlinerParseGenerator(cpuRepository, dramRepository, supplyRepository, ssdRepository, videoCardRepository);
         Iterable<CpuEntity> ipce = cpuRepository.findAll();
         model.addAttribute("ipce", ipce);
         return "home";
