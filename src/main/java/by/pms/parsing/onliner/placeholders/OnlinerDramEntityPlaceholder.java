@@ -1,6 +1,6 @@
 package by.pms.parsing.onliner.placeholders;
 
-import by.pms.entity.DramEntity;
+import by.pms.entity.baseEntity.DramEntity;
 import by.pms.parsing.WebDriverStarter;
 import by.pms.repository.DramRepository;
 import org.jsoup.Jsoup;
@@ -45,17 +45,19 @@ public class OnlinerDramEntityPlaceholder {
                 for (int i = 0; i < allTables.size(); i++) {
                     if (allTables.get(i).text().contains(DRAM_SPEC[j])) {
                         if (j == 4 || j == 11 || j == 12) {
-                            if (allTables.get(i + 1).attr("class").equals("i-x")) dramEntityTmp[j] = "true";
+                            if (!allTables.get(i + 1).getElementsByClass("i-tip").isEmpty()) dramEntityTmp[j] = "true";
                             break;
                         }
-                        if (allTables.get(i + 1).text() != null) {
+                        if (allTables.get(i + 1).text() != null && !allTables.get(i + 1).text().isEmpty()) {
+                            if (allTables.get(i + 1).text().contains("Мб")) {
+                                dramEntityTmp[j] = String.valueOf(Double.parseDouble(allTables.get(i+1).text()
+                                        .replace(" Мб", "")) / 1000);
+                            }
                             dramEntityTmp[j] = allTables.get(i + 1).text();
                             break;
                         }
                     }
                 }
-                if (j == 1 && dramEntityTmp[1].contains("Мб"))
-                    dramEntityTmp[1] = "0." + dramEntityTmp[1].replace(" Мб", "");
                 if (dramEntityTmp[j] == null || dramEntityTmp[j].isEmpty()) dramEntityTmp[j] = "0";
             }
         } catch (Exception e) {
@@ -75,7 +77,10 @@ public class OnlinerDramEntityPlaceholder {
                     Double.parseDouble(dramEntityTmp[7].replace("T", "")),
                     dramEntityTmp[8],
                     Double.parseDouble(dramEntityTmp[9].replace(" В", "")),
-                    Double.parseDouble(dramEntityTmp[10].replace("(", "").replace(")", "")),
+                    Double.parseDouble(dramEntityTmp[10].replace("(", "")
+                            .replace(")", "")
+                            .replace(" Ready", "")
+                            .replace("Intel XMP ", "")),
                     Boolean.parseBoolean(dramEntityTmp[11]),
                     Boolean.parseBoolean(dramEntityTmp[12]),
                     dramEntityTmp[13]

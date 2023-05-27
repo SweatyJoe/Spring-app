@@ -1,52 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <link rel="stylesheet" href="/defaultStyle.css">
     <meta charset="UTF-8">
     <title>Title</title>
+    <script src="/js.js" th:inline="javascript"></script>
 </head>
-<style>
-    .div_style {
-        background-color: #ffffff;
-        display: inline-block;
-        position: relative;
-
-        text-align: center;
-
-        max-width: 95%;
-        border-radius: 20px;
-        overflow-x: hidden;
-    }
-
-    .div_style2 {
-        box-sizing: content-box;
-        display: inline-block;
-        column-count: 3;
-        column-width: auto;
-        column-gap: 4%;
-        padding: 20px;
-    }
-
-    img {
-        margin: 10px;
-    }
-
-    p {
-        box-sizing: border-box;
-        display: inline-block;
-    }
-</style>
-<body style="background-color: rgb(47,46,46); background-image: wood.jpg">
+<body style="background-color: rgb(47,46,46)" onload="onload()">
+<div>
+    <a id="restore-button" class="button" onclick="reStore()" style="visibility: hidden">Удалить ЦПУ из
+        выбранного</a>
+</div>
+<div>
+    <input type="text" id="Input" onkeyup="myFunction()" placeholder="Search for cpu name..">
+</div>
+<div>
+    <a id="comeBack" class="button" onclick="comeBack()">На главную</a>
+</div>
 <div class="div_style2">
     <div class="div_style" th:each="el : ${ipce}">
-        <!--<img src="https://www.777555.by/content/thumb/items/img_1149957_big_1_175.jpg" alt="Image">-->
-        <div>
-            <h3 th:text="${el.getName()}">Процессор AMD Ryzen 9 7950X</h3>
-            <p th:utext="'TDP: ' +${el.getTdp()} + '  Ядер: ' + ${el.getCors()} + '  Частота: ' + ${el.getFreq()} + '  Макс.частота: ' + ${el.getMaxFreq()}">Ничего нет :(</p>
-            <p th:text="'Потоков: ' + ${el.getThreads()} + '  Сокет: ' + ${el.getSocket()}"></p>
-            <p th:text="${el.getMemory()}"/>
-            <p th:text="${el.getIntegratedGraph()}"/>
-            <p th:text="${el.isBox()}"/>
-            <p th:text="${el.getTdp()}"/>
+        <div th:with="idNaw=${el.getId()}">
+            <h2 th:text="${el.getName()}">Процессор AMD Ryzen 9 7950X</h2>
+            <p th:utext="'Количество ядер: ' + ${el.getCors()} + '  Частота: ' + ${el.getFreq()} + '  Макс.частота: ' + ${el.getMaxFreq()}">
+                Ничего нет :(</p>
+            <a class="button" href="#" th:href="@{/cpuInfo/{id}(id = ${el.getId()})}" th:method="post">Информация</a>
+            <a class="button" href="" th:attr="onclick=|store('${el.getId}')|">Выбрать</a>
         </div>
     </div>
 </div>

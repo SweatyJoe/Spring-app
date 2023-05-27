@@ -37,16 +37,36 @@ public class ZeonParseThread implements Runnable {
                 String tmpUrl = url + i;
                 Document doc = Jsoup
                         .connect(tmpUrl)
-                        .timeout(4000)
+                        .timeout(5000)
                         .get();
                 Elements content = doc.select("div.catalog-item-title");
                 Elements costs = doc.select("div.catalog-item-pricemini");
 
                 for (int j = 0; j < content.size(); j++) {
-                    elements.add(new Components(content.get(j).text(),
+                    String textContent = content.get(j).text();
+                    if (!textContent.contains("Оперативная память") && controlIterator == 7
+                            && !textContent.contains("Модуль памяти") && !textContent.contains("Память оперативная"))
+                        textContent = "Оперативная память " + textContent;
+                    if (!textContent.contains("Материнская плата") && controlIterator == 6)
+                        textContent = "Материнская плата " + textContent;
+                    if (!textContent.contains("Корпус") && controlIterator == 5) textContent = "Корпус " + textContent;
+                    if ((!textContent.contains("Жесткий диск") || !textContent.contains("Гибридный")) && controlIterator == 4)
+                        textContent = "Жесткий диск " + textContent;
+                    if (!textContent.contains("Видеокарта") && controlIterator == 3)
+                        textContent = "Видеокарта " + textContent;
+                    if (controlIterator == 2 && !textContent.contains("Блок питания"))
+                        textContent = "Блок питания " + textContent;
+                    if (!textContent.contains("SSD") && controlIterator == 1) textContent = "SSD " + textContent;
+                    if (!textContent.contains("Процессор") && controlIterator == 0)
+                        textContent = "Процессор " + textContent;
+                    elements.add(new Components(textContent
+                            .replace("Модуль памяти", "Оперативная память")
+                            .replace("Память оперативная", "Оперативная память")
+                            .replace("Память", "Оперативная память")
+                            .replace("Накопитель ", ""),
                             content.get(j).child(0).attributes().get("href"),
                             Float.parseFloat(costs.get(j).text().replace(",", ".").
-                                    replace(" руб*", ""))));
+                                    replace(" руб*", "").replace(" ", ""))));
                 }
                 Elements hasNextPageElements = doc.select(".next_page");
                 if (hasNextPageElements.size() == 1 && i > 2) break;

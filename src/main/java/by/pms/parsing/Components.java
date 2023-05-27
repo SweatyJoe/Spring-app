@@ -1,5 +1,8 @@
 package by.pms.parsing;
 
+import lombok.Getter;
+
+@Getter
 public class Components {
     private String name;
     private String url;
@@ -9,5 +12,14 @@ public class Components {
         this.name = name;
         this.url = url;
         this.cost = cost;
+    }
+
+    @Override
+    public String toString() {
+        return "Components{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", cost=" + cost +
+                '}';
     }
 }

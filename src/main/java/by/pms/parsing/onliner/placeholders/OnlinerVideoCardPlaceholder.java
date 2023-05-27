@@ -1,6 +1,6 @@
 package by.pms.parsing.onliner.placeholders;
 
-import by.pms.entity.VideoCardEntity;
+import by.pms.entity.baseEntity.VideoCardEntity;
 import by.pms.parsing.WebDriverStarter;
 import by.pms.repository.VideoCardRepository;
 import org.jsoup.Jsoup;
@@ -80,19 +80,32 @@ public class OnlinerVideoCardPlaceholder {
             for (int j = 0; j < 39; j++) {
                 for (int i = 0; i < allTables.size(); i++) {
                     if (allTables.get(i).text().contains(VIDEO_SPEC[j])) {
-                        try{
-                            if (allTables.get(i + 1).text() == null && allTables.get(i + 1).attr("class").contains("i-tip")) {
+                        try {
+                            if (allTables.get(i).text().contains("Энергопотребление")
+                                    && !allTables.get(i).text().equals("Энергопотребление ")) {
+                                videoCardTmp[j] = allTables.get(i).child(1).text()
+                                        .replace("Энергопотребление ", "")
+                                        .replace(".", "");
+                                break;
+                            }
+                            if ((allTables.get(i + 1).text() == null || allTables.get(i + 1).text().isEmpty())
+                                    && !allTables.get(i + 1).getElementsByClass("i-tip").isEmpty()) {
                                 videoCardTmp[j] = "true";
                                 break;
-                            } else if (allTables.get(i + 1).text() != null || !allTables.get(i+1).text().isEmpty()) {
+                            } else if (allTables.get(i + 1).text() != null || !allTables.get(i + 1).text().isEmpty()) {
+                                if (allTables.get(i + 1).text().contains("Основные")) break;
                                 videoCardTmp[j] = allTables.get(i + 1).text();
-                            } else videoCardTmp[j] = "0";
-                        } catch (IndexOutOfBoundsException oops){
+                                break;
+                            } else {
+                                videoCardTmp[j] = "0";
+                                break;
+                            }
+                        } catch (IndexOutOfBoundsException oops) {
                             break;
                         }
                     }
                 }
-                if(videoCardTmp[j] == null || videoCardTmp[j].isEmpty()) videoCardTmp[j] = "0";
+                if (videoCardTmp[j] == null || videoCardTmp[j].isEmpty()) videoCardTmp[j] = "0";
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,36 +120,49 @@ public class OnlinerVideoCardPlaceholder {
                     Boolean.parseBoolean(videoCardTmp[4]),
                     Boolean.parseBoolean(videoCardTmp[5]),
                     Boolean.parseBoolean(videoCardTmp[6]),
-                    Integer.parseInt(videoCardTmp[7].replace(" МГц", "").replace(" ", "").replaceAll("\\(.+\\)", "")),
-                    Integer.parseInt(videoCardTmp[8].replace(" МГц", "").replace(" ", "").replaceAll("\\(.+\\)", "")),
+                    Integer.parseInt(videoCardTmp[7].replace(" МГц", "")
+                            .replace(" ", "").replaceAll("\\(.+\\)", "")),
+                    Integer.parseInt(videoCardTmp[8].replace(" МГц", "")
+                            .replace(" ", "").replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(videoCardTmp[9].replace(" ", "")),
-                    Integer.parseInt(videoCardTmp[10]),
-                    Integer.parseInt(videoCardTmp[11].replace(" МБ", "").replace(" ГБ", "000")),
+                    Integer.parseInt(videoCardTmp[10].replace(" ", "")),
+                    Integer.parseInt(videoCardTmp[11].replace(" Мб", "")
+                            .replace(" ГБ", "000")),
                     videoCardTmp[12],
-                    Integer.parseInt(videoCardTmp[13].replace(" МГц", "").replace(" ", "")),
+                    Integer.parseInt(videoCardTmp[13].replace(" МГц", "")
+                            .replace(" ", "")),
                     Double.parseDouble(videoCardTmp[14].replace(" ГБ/с", "")),
-                    Integer.parseInt(videoCardTmp[15].replace(" бит", "")),
+                    Integer.parseInt(videoCardTmp[15].replace(" бит", "")
+                            .replaceAll("\\(.+\\)", "")),
                     videoCardTmp[16],
                     Boolean.parseBoolean(videoCardTmp[17]),
                     videoCardTmp[18].replace(" pin", ""),
                     Integer.parseInt(videoCardTmp[19].replace(" Вт", "")),
                     Integer.parseInt(videoCardTmp[20].replace(" Вт", "")),
                     videoCardTmp[21],
-                    Double.parseDouble(videoCardTmp[22].replace(" слота", "").replace(" слот", "")),
-                    Integer.parseInt(videoCardTmp[23]),
-                    Double.parseDouble(videoCardTmp[24].replace(" мм", "")),
-                    Double.parseDouble(videoCardTmp[25].replace(" мм", "")),
+                    Double.parseDouble(videoCardTmp[22].replace(" слота", "")
+                            .replace(" слот", "")),
+                    Integer.parseInt(videoCardTmp[23].replace(" (радиатор 2x 120 мм)", "")),
+                    Double.parseDouble(videoCardTmp[24].replace(" мм", "")
+                            .replaceAll("\\(.+\\)", "")),
+                    Double.parseDouble(videoCardTmp[25].replace(" мм", "")
+                            .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     Double.parseDouble(videoCardTmp[26].replace(" мм", "")),
                     Boolean.parseBoolean(videoCardTmp[27]),
                     videoCardTmp[28],
                     Integer.parseInt(videoCardTmp[29]),
-                    Integer.parseInt(videoCardTmp[30].replaceAll("\\(.+\\)", "")),
-                    Integer.parseInt(videoCardTmp[31]),
+                    Integer.parseInt(videoCardTmp[30].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "")),
+                    Integer.parseInt(videoCardTmp[31].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "")),
                     videoCardTmp[32],
-                    Integer.parseInt(videoCardTmp[33]),
-                    Integer.parseInt(videoCardTmp[34].replace(" (1.4)", "")),
+                    Integer.parseInt(videoCardTmp[33].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "")),
+                    Integer.parseInt(videoCardTmp[34].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "")),
                     videoCardTmp[35],
-                    Integer.parseInt(videoCardTmp[36].replaceAll("\\(.+\\)", "")),
+                    Integer.parseInt(videoCardTmp[36].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "")),
                     Integer.parseInt(videoCardTmp[37].replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(videoCardTmp[38])
             );

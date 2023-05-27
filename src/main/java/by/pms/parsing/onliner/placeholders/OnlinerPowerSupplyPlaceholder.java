@@ -1,6 +1,6 @@
 package by.pms.parsing.onliner.placeholders;
 
-import by.pms.entity.PowerSupplyEntity;
+import by.pms.entity.baseEntity.PowerSupplyEntity;
 import by.pms.parsing.WebDriverStarter;
 import by.pms.repository.PowerSupplyRepository;
 import org.jsoup.Jsoup;
@@ -8,39 +8,37 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.transaction.TransactionSystemException;
 
-import java.util.Objects;
-
 public class OnlinerPowerSupplyPlaceholder {
     private static final String[] POWER_SPEC = {
             "Назначение",
-            "Мощность ",
-            "Диапазон входного напряжения сети ",
+            "Мощность",
+            "Диапазон входного напряжения сети",
             "Высота",
             "Ширина",
             "Глубина",
-            "Стандарт блока питания ",
-            "Количество отдельных линий +12V ",
-            "Макс. ток по линии +12V ",
-            "Комбинированная нагрузка по +12V ",
-            "Коррекция фактора мощности (PFC) ",
-            "Сертификат 80 PLUS ",
+            "Стандарт блока питания",
+            "Количество отдельных линий +12V",
+            "Макс. ток по линии +12V",
+            "Комбинированная нагрузка по +12V",
+            "Коррекция фактора мощности (PFC)",
+            "Сертификат 80 PLUS",
             "Размер вентилятора блока питания",
-            "Подсветка вентилятора ",
-            "Модульное подключение кабелей питания ",
-            "Питание материнской платы ",
-            "CPU 4 pin ",
-            "CPU 8 pin ",
-            "FDD 4 pin ",
-            "IDE 4 pin ",
-            "SATA ",
-            "PCIe 6 pin ",
-            "PCIe 8 pin ",
-            "PCIe Gen5 (16 pin) ",
-            "USB Power "
+            "Подсветка вентилятора",
+            "Модульное подключение кабелей питания",
+            "Питание материнской платы",
+            "CPU 4 pin",
+            "CPU 8 pin",
+            "FDD 4 pin",
+            "IDE 4 pin",
+            "SATA",
+            "PCIe 6 pin",
+            "PCIe 8 pin",
+            "PCIe Gen5 (16 pin)",
+            "USB Power"
     };
     private final String powerSupplyName;
     private final String url;
-    private PowerSupplyRepository repository;
+    private final PowerSupplyRepository repository;
 
     public OnlinerPowerSupplyPlaceholder(String powerSupplyName, String url, PowerSupplyRepository repository) {
         this.powerSupplyName = powerSupplyName;
@@ -68,16 +66,16 @@ public class OnlinerPowerSupplyPlaceholder {
         for (int j = 0; j < 25; j++) {
             for (int i = 0; i < allTables.size(); i++) {
                 if (allTables.get(i).text().contains(POWER_SPEC[j])) {
-                    try{
-                        if (allTables.get(i + 1).text() == null) {
-                            if (Objects.equals(allTables.get(i + 1).attr("class"), "i-tip")){
+                    try {
+                        if (allTables.get(i + 1).text() == null || allTables.get(i + 1).text().isEmpty()) {
+                            if (!allTables.get(i + 1).getElementsByClass("i-tip").isEmpty()) {
                                 powerEntityTmp[j] = "true";
                                 break;
                             }
                         } else {
                             powerEntityTmp[j] = allTables.get(i + 1).text();
                         }
-                    } catch (IndexOutOfBoundsException oops){
+                    } catch (IndexOutOfBoundsException oops) {
                         break;
                     }
                 }
@@ -88,15 +86,18 @@ public class OnlinerPowerSupplyPlaceholder {
             return new PowerSupplyEntity(
                     powerSupplyName,
                     powerEntityTmp[0],
-                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "").replace(" ","").replaceAll("\\(.+\\)", "")),
+                    Integer.parseInt(powerEntityTmp[1].replace(" Вт", "")
+                            .replace(" ", "").replaceAll("\\(.+\\)", "")),
                     powerEntityTmp[2],
                     Double.parseDouble(powerEntityTmp[3].replace(" мм", "")),
                     Double.parseDouble(powerEntityTmp[4].replace(" мм", "")),
                     Double.parseDouble(powerEntityTmp[5].replace(" мм", "")),
                     powerEntityTmp[6],
                     Integer.parseInt(powerEntityTmp[7]),
-                    Double.parseDouble(powerEntityTmp[8].replace(" А", "")),
-                    Double.parseDouble(powerEntityTmp[9].replace(" Вт", "")),
+                    Double.parseDouble(powerEntityTmp[8].replace(" А", "")
+                            .replaceAll("\\(.+\\)", "")),
+                    Double.parseDouble(powerEntityTmp[9].replace(" Вт", "")
+                            .replaceAll("\\(.+\\)", "")),
                     powerEntityTmp[10],
                     powerEntityTmp[11],
                     powerEntityTmp[12], //fan size

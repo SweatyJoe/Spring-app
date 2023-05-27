@@ -1,6 +1,6 @@
 package by.pms.repository;
 
-import by.pms.entity.SsdEntity;
+import by.pms.entity.baseEntity.SsdEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

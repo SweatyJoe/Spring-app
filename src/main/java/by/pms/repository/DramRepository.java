@@ -1,6 +1,6 @@
 package by.pms.repository;
 
-import by.pms.entity.DramEntity;
+import by.pms.entity.baseEntity.DramEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 

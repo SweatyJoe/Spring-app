@@ -1,11 +1,11 @@
-package by.pms.entity;
+package by.pms.entity.baseEntity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @Entity
 @NoArgsConstructor
 public class DramEntity {

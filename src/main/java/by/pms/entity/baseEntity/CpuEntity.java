@@ -1,11 +1,11 @@
-package by.pms.entity;
+package by.pms.entity.baseEntity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
 @NoArgsConstructor
 @Entity
 public class CpuEntity {
@@ -21,16 +21,14 @@ public class CpuEntity {
     private int threads;
     private int tdp;
     private boolean box;
-    @NotNull
     private String integratedGraph;
     private double freq;
     private double maxFreq;
-    @NotNull
     private String memory;
     @NotNull
     private String url;
 
-    public CpuEntity(String name, String socket, int cors, int threads, int tdp, boolean box,
+    public CpuEntity(@NotNull String name, @NotNull String socket, int cors, int threads, int tdp, boolean box,
                      String integratedGraph, double freq, double maxFreq, String memory, String url) {
         this.name = name;
         this.socket = socket;

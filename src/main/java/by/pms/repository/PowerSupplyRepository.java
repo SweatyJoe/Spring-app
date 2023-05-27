@@ -1,6 +1,6 @@
 package by.pms.repository;
 
-import by.pms.entity.PowerSupplyEntity;
+import by.pms.entity.baseEntity.PowerSupplyEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package by.pms.repository;
 
-import by.pms.entity.VideoCardEntity;
+import by.pms.entity.baseEntity.VideoCardEntity;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;

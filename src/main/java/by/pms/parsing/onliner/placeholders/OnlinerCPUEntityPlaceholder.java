@@ -1,6 +1,6 @@
 package by.pms.parsing.onliner.placeholders;
 
-import by.pms.entity.CpuEntity;
+import by.pms.entity.baseEntity.CpuEntity;
 import by.pms.parsing.WebDriverStarter;
 import by.pms.repository.CpuRepository;
 import org.jsoup.Jsoup;
@@ -68,7 +68,9 @@ public class OnlinerCPUEntityPlaceholder {
                     cpuEntityTmp[0],
                     Integer.parseInt(cpuEntityTmp[1]),
                     Integer.parseInt(cpuEntityTmp[2]),
-                    Integer.parseInt(cpuEntityTmp[3].replace(" Вт", "").replace(" (макс.)", "")),
+                    Integer.parseInt(cpuEntityTmp[3].replace(" Вт", "")
+                            .replace(" (макс.)", "")
+                            .replaceAll("\\(.+\\)", "")),
                     !Objects.equals(cpuEntityTmp[4], "OEM"),
                     cpuEntityTmp[5],
                     Double.parseDouble(cpuEntityTmp[6].replace(" ГГц", "")),

@@ -1,6 +1,6 @@
 package by.pms.parsing.onliner.placeholders;
 
-import by.pms.entity.MotherboardEntity;
+import by.pms.entity.baseEntity.MotherboardEntity;
 import by.pms.parsing.WebDriverStarter;
 import by.pms.repository.MotherboardRepository;
 import org.jsoup.Jsoup;

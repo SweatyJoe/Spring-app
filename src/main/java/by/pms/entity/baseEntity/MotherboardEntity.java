@@ -1,4 +1,4 @@
-package by.pms.entity;
+package by.pms.entity.baseEntity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

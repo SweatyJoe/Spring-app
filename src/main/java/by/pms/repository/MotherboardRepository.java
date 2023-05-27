@@ -1,6 +1,6 @@
 package by.pms.repository;
 
-import by.pms.entity.MotherboardEntity;
+import by.pms.entity.baseEntity.MotherboardEntity;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.lang.NonNull;
 

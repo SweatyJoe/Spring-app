@@ -1,27 +1,27 @@
 package by.pms.parsing.zeon;
 
+import by.pms.entity.ZeonComponentsEntity;
 import by.pms.parsing.Components;
+import by.pms.repository.ZeonComponentsRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * TODO
- *  сделать класс, ну а вообще надо:
- *  поразмыслить над entity для этого всего;
- *  подумать над объеденением онлайнера и зеона,
- *  что б была общая база цен.
+ * TODO something
  */
-public class ZeonParsePlaceholder extends ZeonParseGenerator {
-    private List<Components> ZeonComponents = new ArrayList<>();
-
-    public ZeonParsePlaceholder() {
-        ZeonParseGenerator e = new ZeonParsePlaceholder();
+public class ZeonParsePlaceholder {
+    public ZeonParsePlaceholder(ZeonComponentsRepository repository) {
+        ZeonParseGenerator e = new ZeonParseGenerator();
         e.parse();
-        ZeonComponents = e.getComponents();
+        componentsToEntity(e.getComponents(), repository);
     }
 
-    private void doing() {
-
+    private void componentsToEntity(List<Components> components, ZeonComponentsRepository repository) {
+        for (var c : components) {
+            System.out.println(c.toString());
+            if(repository.findByNameLikeIgnoreCase(c.getName()).isEmpty()){
+                repository.save(new ZeonComponentsEntity(c.getName(), c.getUrl(), c.getCost()));
+            }
+        }
     }
 }

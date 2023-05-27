@@ -1,4 +1,4 @@
-package by.pms.entity;
+package by.pms.entity.baseEntity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
@@ -7,11 +7,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
 
 @Entity
-@Data
+@Getter
 @NoArgsConstructor
 @PackagePrivate
 public class VideoCardEntity {
