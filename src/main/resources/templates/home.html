@@ -6,20 +6,44 @@
 </head>
 <body>
 <div>
-    <table>
+    <!--<form th:action="@{/info/${name}}" method="get" th:field="*{name}">
+        <select th:onselect="name" id="myDropdown">
+            <option th:each="el : ${ipce}" th:value="${el.getName()}" th:text="${el.getName}"></option>
+        </select>
+    </form>-->
+</div>
+<div style="overflow-x:auto;">
+    <input type="text" id="Input" onkeyup="myFunction()" placeholder="Search for cpu name..">
+    <table id="table" style="border-color: black">
         <tr>
-            <th>ID</th>
-            <th>NAME</th>
-            <th>URL</th>
-            <th>COST</th>
+            <th onclick="sortTable(0)">Наименование</th>
+            <th onclick="sortTable(1)">Частота</th>
+            <th onclick="sortTable(2)">Макс. частота</th>
+            <th onclick="sortTable(3)">Кол. ядер</th>
+            <th onclick="sortTable(4)">Кол. потоков</th>
+            <th onclick="sortTable(5)">Сокет</th>
+            <th onclick="sortTable(6)">Поддержка памяти</th>
+            <th onclick="sortTable(7)">Интегрированная графика</th>
+            <th onclick="sortTable(8)">Куллер в наличии</th>
+            <th onclick="sortTable(9)">TDP</th>
         </tr>
-        <tr th:each="el : ${ipce}">
-            <td th:text="${el.getId()}"/>
+        <tr th:each="el:${ipce}">
             <td th:text="${el.getName()}"/>
-            <td th:text="${el.getUrl()}"/>
-            <td th:text="${el.getCost()}"/>
+            <td th:text="${el.getFreq()}"/>
+            <td th:text="${el.getMaxFreq()}"/>
+            <td th:text="${el.getCors()}"/>
+            <td th:text="${el.getThreads()}"/>
+            <td th:text="${el.getSocket()}"/>
+            <td th:text="${el.getMemory()}"/>
+            <td th:text="${el.getIntegratedGraph()}"/>
+            <td th:text="${el.isBox()}"/>
+            <td th:text="${el.getTdp()}"/>
         </tr>
     </table>
+    <br>
 </div>
 </body>
+<script>
+
+</script>
 </html>

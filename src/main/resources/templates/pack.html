@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/defaultStyle.css" rel="stylesheet">
+    <script src="/js.js" th:inline="javascript"></script>
+</head>
+<body onload="onStartCheckComponents()">
+<div>
+    <div>
+        <div th:with="cpuel = ${cpu?.get()}">
+            <p th:text="${cpuel?.getName()}"></p>
+        </div>
+        <a class="button" type="button" href="/findCpu">Найти ЦПУ</a>
+    </div>
+    <div>
+        <div>
+
+        </div>
+        <a class="button" href="#">Найти материнскую плату</a>
+    </div>
+    <div>
+        <div th:with="videl = ${gpu?.get()}">
+            <p th:text="${videl?.getName()}"></p>
+        </div>
+        <a class="button" href="#">Найти видеокарту</a>
+    </div>
+</div>
+</body>
+<script th:inline="javascript">
+    function onStartCheckComponents(){
+        let url = comeBack();
+        if(window.location.href.length !== url.length){
+            location.href = url;
+        }
+    }
+</script>
+</html>

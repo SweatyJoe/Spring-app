@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <link rel="stylesheet" href="/defaultStyle.css">
+  <meta charset="UTF-8">
+  <script src="/js.js" th:inline="javascript"></script>
+  <title>Информация о гпу</title>
+</head>
+<body>
+<div>
+  <div>
+    <div th:with="el = ${gpu.get()}">
+      <div>
+        <h3 th:text="${el.getName()}">Видеокарта не загрузилась =(</h3>
+        <p th:text="${el.getManufacturer()}"/>
+        <p th:text="${el.getGraphicProcessor()}"/>
+        <br>
+        <p th:text="${el.isOverclock()}"/>
+        <p th:text="${el.isBeamTracing()}"/>
+        <p th:text="${el.isLhr()}"/>
+        <p th:text="${el.isExternal()}"/>
+        <p th:text="${el.getBaseFreq()}"/>
+        <p th:text="${el.getMaxFreq()}"/>
+        <p th:text="${el.getCountStreamProcessors()}"/>
+        <p th:text="${el.getCountRTCors()}"/>
+        <p th:text="${el.getVideoMemory()}"/>
+        <p th:text="${el.getMemoryType()}"/>
+        <p th:text="${el.getMemoryFreq()}"/>
+        <p th:text="${el.getMemoryBandwidth()}"/>
+        <p th:text="${el.getMemoryBus()}"/>
+        <p th:text="${el.getDirectX()}"/>
+        <p th:text="${el.isSli()}"/>
+        <p th:text="${el.getConnectors()}"/>
+        <p th:text="${el.getEnergyConsumption()}"/>
+        <p th:text="${el.getRecommendedPower()}"/>
+        <p th:text="${el.getColling()}"/>
+        <p th:text="${el.getThicknessCooling()}"/>
+        <p th:text="${el.getFansCount()}"/>
+        <h3>Габариты</h3>
+        <p th:text="${el.getLength()}"/>
+        <p th:text="${el.getHeight()}"/>
+        <p th:text="${el.getThickness()}"/>
+        <p th:text="${el.isLowProfile()}"/>
+        <h3>Коннекторы</h3>
+        <p th:text="${el.getVga()}"/>
+        <p th:text="${el.getDvi()}"/>
+        <p th:text="${el.getHdmi()}"/>
+        <p th:text="${el.getHdmiVersion()}"/>
+        <p th:text="${el.getDisplayPort()}"/>
+        <p th:text="${el.getDisplayPortVersion()}"/>
+        <p th:text="${el.getMiniDisplayPort()}"/>
+        <p th:text="${el.getVESAStereo()}"/>
+        <p th:text="${el.getUsbTypeC()}"/>
+        <br>
+        <p th:text="${el.getSubFunctions()}"/>
+        <br>
+        <a class="button" href="/findCpu">Назад</a>
+        <a class="button" href="" th:attr="onclick=|store('${el.getId}')|">Выбрать</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

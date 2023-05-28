@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="/defaultStyle.css">
+    <meta charset="UTF-8">
+    <script src="/js.js" th:inline="javascript"></script>
+    <title>Информация о цпу</title>
+</head>
+<body>
+<div>
+    <div>
+        <div th:with="el = ${cpu.get()}">
+            <div>
+                <h3 th:text="${el.getName()}">Процессор не загрузился =(</h3>
+                <p th:utext="'TDP: ' +${el.getTdp()} + '  Ядер: ' + ${el.getCors()} + '  Частота: ' + ${el.getFreq()} + '  Макс.частота: ' + ${el.getMaxFreq()}">
+                    Ничего нет :(</p>
+                <p th:text="'Потоков: ' + ${el.getThreads()} + '  Сокет: ' + ${el.getSocket()}"></p>
+                <p th:text="${el.getMemory()}"/>
+                <p th:text="${el.getIntegratedGraph()}"/>
+                <p th:text="${el.isBox()}"/>
+                <p th:text="${el.getTdp()}"/>
+                <br>
+                <a class="button" href="/findCpu">Назад</a>
+                <a class="button" href="" th:attr="onclick=|store('${el.getId}')|">Выбрать</a>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <p th:if="${cost.isEmpty()}">Кажется результаты не найдены. Попробуйте другой процессор</p>
+            <tr th:each="items : ${cost}">
+                <td><span th:text="${items.getCost()}"/></td>
+                <td><a th:href="${items.getUrl()}">Url</a></td>
+            </tr>
+        </div>
+    </div>
+</div>
+</body>
+</html>
