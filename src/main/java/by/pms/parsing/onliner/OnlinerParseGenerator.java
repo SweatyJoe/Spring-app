@@ -17,15 +17,17 @@ public class OnlinerParseGenerator {
     private PowerSupplyRepository supplyRepository;
     private SsdRepository ssdRepository;
     private VideoCardRepository videoCardRepository;
+    private MotherboardRepository motherboardRepository;
 
     public OnlinerParseGenerator(CpuRepository cpuRepository, DramRepository dramRepository,
                                  PowerSupplyRepository supplyRepository, SsdRepository ssdRepository,
-                                 VideoCardRepository videoCardRepository) {
+                                 VideoCardRepository videoCardRepository, MotherboardRepository motherboardRepository) {
         this.cpuRepository = cpuRepository;
         this.dramRepository = dramRepository;
         this.supplyRepository = supplyRepository;
         this.ssdRepository = ssdRepository;
         this.videoCardRepository = videoCardRepository;
+        this.motherboardRepository = motherboardRepository;
         startValidating();
     }
 
@@ -54,11 +56,13 @@ public class OnlinerParseGenerator {
         }
 
         ThreadPoolExecutor newPool = new ThreadPoolExecutor(7, 14,
-                100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), Executors.defaultThreadFactory());
+                100, TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8),
+                Executors.defaultThreadFactory());
         List<OnlinerComponentsValidating> validatingList = new ArrayList<>();
         for (var item : threadList.get(0).getCPUElements().keySet()) {
             validatingList.add(new OnlinerComponentsValidating(item, threadList.get(0).getCPUElements().get(item),
-                    cpuRepository, dramRepository, supplyRepository, ssdRepository, videoCardRepository));
+                    cpuRepository, dramRepository, supplyRepository, ssdRepository, videoCardRepository,
+                    motherboardRepository));
         }
         try {
             for (var list : validatingList) {

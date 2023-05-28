@@ -18,7 +18,6 @@ public class ZeonParsePlaceholder {
 
     private void componentsToEntity(List<Components> components, ZeonComponentsRepository repository) {
         for (var c : components) {
-            System.out.println(c.toString());
             if(repository.findByNameLikeIgnoreCase(c.getName()).isEmpty()){
                 repository.save(new ZeonComponentsEntity(c.getName(), c.getUrl(), c.getCost()));
             }

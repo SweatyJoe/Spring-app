@@ -37,18 +37,5 @@ public class ZeonParseGenerator {
         for(var s : listTmpParse){
             components.addAll(s.getElements());
         }
-        /*ExecutorService executorService = Executors.newFixedThreadPool(8);
-        Future future = null;
-        for (var s : listTmpParse) {
-            future = executorService.submit(s);
-        }
-        try {
-            if (future != null) {
-                future.get();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        executorService.shutdown();*/
     }
 }

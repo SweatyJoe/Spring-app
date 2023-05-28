@@ -27,11 +27,22 @@
     </div>
     <div>
         <div>
-            <p th:if="${cost.isEmpty()}">Кажется результаты не найдены. Попробуйте другой процессор</p>
-            <tr th:each="items : ${cost}">
-                <td><span th:text="${items.getCost()}"/></td>
-                <td><a th:href="${items.getUrl()}">Url</a></td>
-            </tr>
+            <th:block th:unless="${costzeon.isEmpty()}" >
+                <p th:if="${costzeon.isEmpty()}" style="visibility: hidden">[</p>
+                <tr th:with="items = ${costzeon.get()}">
+                    <td th:text="Zeon"></td>
+                    <td><span th:text="${items.getCost()}"/></td>
+                    <td><a th:href="${items.getUrl()}">Url</a></td>
+                </tr>
+            </th:block>
+            <br>
+            <th:block th:unless="${costpro.isEmpty()}">
+                <tr th:with="itempro = ${costpro.get()}">
+                    <td th:text="Prooffice"></td>
+                    <td><span th:text="${itempro.getCost()}"/></td>
+                    <td><a th:href="${itempro.getUrl()}">Url</a></td>
+                </tr>
+            </th:block>
         </div>
     </div>
 </div>

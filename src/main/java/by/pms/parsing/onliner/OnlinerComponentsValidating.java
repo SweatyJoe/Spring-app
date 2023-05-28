@@ -9,12 +9,13 @@ public class OnlinerComponentsValidating implements Runnable {
     private final PowerSupplyRepository supplyRepository;
     private final SsdRepository ssdRepository;
     private final VideoCardRepository videoCardRepository;
+    private final MotherboardRepository motherboardRepository;
     private String item;
     private String url;
 
     public OnlinerComponentsValidating(String item, String url, CpuRepository cpuRepository, DramRepository dramRepository,
                                        PowerSupplyRepository supplyRepository, SsdRepository ssdRepository,
-                                       VideoCardRepository videoCardRepository) {
+                                       VideoCardRepository videoCardRepository, MotherboardRepository motherboardRepository) {
         this.item = item;
         this.url = url;
         this.cpuRepository = cpuRepository;
@@ -22,6 +23,7 @@ public class OnlinerComponentsValidating implements Runnable {
         this.supplyRepository = supplyRepository;
         this.ssdRepository = ssdRepository;
         this.videoCardRepository = videoCardRepository;
+        this.motherboardRepository = motherboardRepository;
     }
 
     public String getItem() {
@@ -44,6 +46,9 @@ public class OnlinerComponentsValidating implements Runnable {
         }
         if (item.contains("Видеокарта ")) {
             new OnlinerVideoCardPlaceholder(item, url, videoCardRepository);
+        }
+        if(item.contains("Материнская плата ")){
+            new OnlinerMotherboardPlaceholder(item, url, motherboardRepository);
         }
     }
 }

@@ -46,9 +46,10 @@ public class OnlinerParseThread implements Runnable {
             int lastPage = 2;
             for (; pageIterator < lastPage + 1; pageIterator++) {
                 Document doc = Jsoup.parse(WebDriverStarter.start(urlGen(pageIterator, components[componentId])));
+                Elements images = doc.select("div.schema-product__image");
                 Elements elements = doc.select("a.js-product-title-link"); //js-product-title-link  //schema-product__group
                 Elements elementsIterator = doc.select("a.schema-pagination__pages-link");
-                if (elementsIterator != null | elementsIterator.size() == 0) {
+                if (elementsIterator != null || elementsIterator.size() == 0) {
                     if (lastPage == 2) {
                         lastPage = elementsIterator.size();
                     }

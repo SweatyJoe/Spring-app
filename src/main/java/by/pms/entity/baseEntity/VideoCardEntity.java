@@ -6,7 +6,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.PackagePrivate;
@@ -34,7 +33,7 @@ public class VideoCardEntity {
     int maxFreq;
     int countStreamProcessors;
     int countRTCors;
-    int videoMemory;
+    double videoMemory;
     String memoryType;
     int memoryFreq;
     double memoryBandwidth;
@@ -69,7 +68,7 @@ public class VideoCardEntity {
     public VideoCardEntity(@NotNull String name, @NotNull String type, @NotNull String manufacturer, String graphicProcessor,
                            boolean overclock, boolean beamTracing, boolean lhr, boolean external,
                            int baseFreq, int maxFreq, int countStreamProcessors, int countRTCors,
-                           int videoMemory, String memoryType, int memoryFreq, double memoryBandwidth,
+                           double videoMemory, String memoryType, int memoryFreq, double memoryBandwidth,
                            int memoryBus, String directX, boolean sli, String connectors,
                            int energyConsumption, int recommendedPower, String colling,
                            double thicknessCooling, int fansCount, double length, double height, double thickness,

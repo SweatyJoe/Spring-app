@@ -10,8 +10,4 @@ import java.util.Optional;
 @Repository
 public interface CpuRepository extends CrudRepository<CpuEntity, Long> {
     Optional<CpuEntity> findByNameLikeIgnoreCase(@NonNull String name);
-    /*TODO
-    *  removing or editing;
-     */
-    /*List<CpuEntity> findCpuEntitiesById(Long cpuId, Pageable pageable);*/
 }

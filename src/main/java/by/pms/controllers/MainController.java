@@ -1,9 +1,12 @@
 package by.pms.controllers;
 
+import by.pms.entity.ProofficeComponentsEntity;
 import by.pms.entity.ZeonComponentsEntity;
 import by.pms.entity.baseEntity.CpuEntity;
 import by.pms.entity.baseEntity.VideoCardEntity;
 import by.pms.parsing.onliner.OnlinerParseGenerator;
+import by.pms.parsing.prooffice.ProofficeParsePlaceholder;
+import by.pms.parsing.zeon.ZeonParsePlaceholder;
 import by.pms.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,8 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class MainController {
@@ -30,6 +32,10 @@ public class MainController {
     private VideoCardRepository videoCardRepository;
     @Autowired
     private ZeonComponentsRepository zeonRepository;
+    @Autowired
+    private ProofficeComponentsRepository proofficeRepository;
+    @Autowired
+    private MotherboardRepository motherboardRepository;
 
     /*TODO
      *  do something with paging;
@@ -43,35 +49,18 @@ public class MainController {
 
     @GetMapping("/")
     public String compare(Model model) {
-        /*ZeonParsePlaceholder zeonParse = new ZeonParsePlaceholder(zeonRepository);
-        try {
-            for (var s : zeonRepository.findAll()) {
-                if (cpuRepository.findByNameLikeIgnoreCase(s.getName()).isEmpty()) {
-                    if (dramRepository.findByNameLikeIgnoreCase(s.getName()).isEmpty()) {
-                        if (supplyRepository.findByNameLikeIgnoreCase(s.getName()).isEmpty()) {
-                            if (ssdRepository.findByNameLikeIgnoreCase(s.getName()).isEmpty()) {
-                                if (videoCardRepository.findByNameLikeIgnoreCase(s.getName()).isEmpty()) {
-                                    System.out.println("Cant find [" + s.getName() + "]");
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
+        ZeonParsePlaceholder zeonPlh = new ZeonParsePlaceholder(zeonRepository);
+        ProofficeParsePlaceholder proofficePlh = new ProofficeParsePlaceholder(proofficeRepository);
         return "pack";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/updateAllEntity")
     public String begin(Model model) {
-        new OnlinerParseGenerator(cpuRepository, dramRepository, supplyRepository, ssdRepository, videoCardRepository);
-        Iterable<CpuEntity> ipce = cpuRepository.findAll();
-        model.addAttribute("ipce", ipce);
-        return "pack";
+        new OnlinerParseGenerator(cpuRepository, dramRepository, supplyRepository,
+                ssdRepository, videoCardRepository, motherboardRepository);
+        Iterable<CpuEntity> cpu = cpuRepository.findAll();
+        model.addAttribute("cpu", cpu);
+        return "home";
     }
 
     @RequestMapping("/list")
@@ -88,19 +77,41 @@ public class MainController {
             resultGpu = videoCardRepository.findById(gpu);
         } catch (Exception e) {
         }
-        if (!resultCpu.isEmpty()) {
+        if (resultCpu.isPresent()) {
             model.addAttribute("cpu", resultCpu);
         }
-        if (!resultGpu.isEmpty()) {
+        if (resultGpu.isPresent()) {
             model.addAttribute("gpu", resultGpu);
         }
         return "pack";
     }
 
+    /*TODO
+     *  long load*/
     @GetMapping("/findCpu")
     public String information_sequence(Model model) {
+        List<CpuEntity> list = new ArrayList<>();
+        Map<Long, Float> allCosts = new HashMap<>();
         Iterable<CpuEntity> ipce = cpuRepository.findAll();
-        model.addAttribute("ipce", ipce);
+
+        for (var s : ipce) {
+            if (zeonRepository.findByNameLikeIgnoreCase(s.getName()).isPresent() ||
+                    proofficeRepository.findByNameLikeIgnoreCase(s.getName()).isPresent()) {
+                list.add(cpuRepository.findByNameLikeIgnoreCase(s.getName()).get());
+                float zcost = zeonRepository.findByNameLikeIgnoreCase(s.getName()).get().getCost();
+                float ccost = proofficeRepository.findByNameLikeIgnoreCase(s.getName()).isPresent() ?
+                        proofficeRepository.findByNameLikeIgnoreCase(s.getName()).get().getCost() : Long.MAX_VALUE;
+                allCosts.put(s.getId(), Math.min(zcost, ccost));
+            }
+        }
+        if (!allCosts.isEmpty()) {
+            /*Map<CpuEntity, Float> collectionMap = new HashMap<>();
+            for (var s : list) {
+                collectionMap.put(s, allCosts.get(s.getId()));
+            }*/
+            model.addAttribute("prices", allCosts);
+        }
+        model.addAttribute("ipce", list);
         return "information_sequence";
     }
 
@@ -109,8 +120,13 @@ public class MainController {
         Optional<CpuEntity> cpu = cpuRepository.findById(id);
         model.addAttribute("cpu", cpu);
         try {
-            List<ZeonComponentsEntity> costResult = zeonRepository.findByNameLikeIgnoreCaseOrderByCostAsc(cpu.get().getName());
-            model.addAttribute("cost", costResult);
+            Optional<ZeonComponentsEntity> costResult = zeonRepository.findByNameLikeIgnoreCase(cpu.get().getName());
+            model.addAttribute("costzeon", costResult);
+        } catch (Exception e) {
+        }
+        try {
+            Optional<ProofficeComponentsEntity> costProofcice = proofficeRepository.findByNameLikeIgnoreCase(cpu.get().getName());
+            model.addAttribute("costpro", costProofcice);
         } catch (Exception e) {
         }
         return "cpuInfo";

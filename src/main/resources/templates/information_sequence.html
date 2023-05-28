@@ -23,6 +23,9 @@
             <h2 th:text="${el.getName()}">Процессор AMD Ryzen 9 7950X</h2>
             <p th:utext="'Количество ядер: ' + ${el.getCors()} + '  Частота: ' + ${el.getFreq()} + '  Макс.частота: ' + ${el.getMaxFreq()}">
                 Ничего нет :(</p>
+            <br>
+            <p th:text="'От ' +${prices.get(el.getId())} + ' Руб.'"></p>
+            <br>
             <a class="button" href="#" th:href="@{/cpuInfo/{id}(id = ${el.getId()})}" th:method="post">Информация</a>
             <a class="button" href="" th:attr="onclick=|store('${el.getId}')|">Выбрать</a>
         </div>

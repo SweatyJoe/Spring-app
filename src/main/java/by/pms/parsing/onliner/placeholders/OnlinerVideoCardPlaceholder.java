@@ -84,13 +84,18 @@ public class OnlinerVideoCardPlaceholder {
                             if (allTables.get(i).text().contains("Энергопотребление")
                                     && !allTables.get(i).text().equals("Энергопотребление ")) {
                                 videoCardTmp[j] = allTables.get(i).child(1).text()
-                                        .replace("Энергопотребление ", "")
+                                        .replace("Энергопотребление - ", "")
                                         .replace(".", "");
+                                break;
+                            }
+                            if (allTables.get(i + 1).text().replaceAll("\\(.+\\)", "").isEmpty()
+                                    && allTables.get(i + 1).getElementsByClass("i-tip").isEmpty()) {
+                                videoCardTmp[j] = "0";
                                 break;
                             }
                             if ((allTables.get(i + 1).text() == null || allTables.get(i + 1).text().isEmpty())
                                     && !allTables.get(i + 1).getElementsByClass("i-tip").isEmpty()) {
-                                videoCardTmp[j] = "true";
+                                videoCardTmp[j] = "1";
                                 break;
                             } else if (allTables.get(i + 1).text() != null || !allTables.get(i + 1).text().isEmpty()) {
                                 if (allTables.get(i + 1).text().contains("Основные")) break;
@@ -126,14 +131,13 @@ public class OnlinerVideoCardPlaceholder {
                             .replace(" ", "").replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(videoCardTmp[9].replace(" ", "")),
                     Integer.parseInt(videoCardTmp[10].replace(" ", "")),
-                    Integer.parseInt(videoCardTmp[11].replace(" Мб", "")
-                            .replace(" ГБ", "000")),
+                    Double.parseDouble(videoCardTmp[11].replace(" ГБ", "")),
                     videoCardTmp[12],
                     Integer.parseInt(videoCardTmp[13].replace(" МГц", "")
                             .replace(" ", "")),
                     Double.parseDouble(videoCardTmp[14].replace(" ГБ/с", "")),
                     Integer.parseInt(videoCardTmp[15].replace(" бит", "")
-                            .replaceAll("\\(.+\\)", "")),
+                            .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     videoCardTmp[16],
                     Boolean.parseBoolean(videoCardTmp[17]),
                     videoCardTmp[18].replace(" pin", ""),
@@ -150,7 +154,7 @@ public class OnlinerVideoCardPlaceholder {
                     Double.parseDouble(videoCardTmp[26].replace(" мм", "")),
                     Boolean.parseBoolean(videoCardTmp[27]),
                     videoCardTmp[28],
-                    Integer.parseInt(videoCardTmp[29]),
+                    Integer.parseInt(videoCardTmp[29].replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(videoCardTmp[30].replaceAll("\\(.+\\)", "")
                             .replace(" ", "")),
                     Integer.parseInt(videoCardTmp[31].replaceAll("\\(.+\\)", "")
