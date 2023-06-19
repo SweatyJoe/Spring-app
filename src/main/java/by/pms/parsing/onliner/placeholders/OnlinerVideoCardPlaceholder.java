@@ -74,7 +74,7 @@ public class OnlinerVideoCardPlaceholder {
 
     private VideoCardEntity urlConvertToEntity() {
         String[] videoCardTmp = new String[39];
-        Document doc = Jsoup.parse(WebDriverStarter.start(url));
+        Document doc = Jsoup.parse(WebDriverStarter.start(url, "c"));
         Elements allTables = doc.select("td");
         try {
             for (int j = 0; j < 39; j++) {
@@ -110,6 +110,18 @@ public class OnlinerVideoCardPlaceholder {
                         }
                     }
                 }
+                if (j == 11) {
+                    if (videoCardTmp[j].contains("Мб")) {
+                        videoCardTmp[j] = String.valueOf(Double.parseDouble(videoCardTmp[j]
+                                .replace(" Мб", "")) / 1000);
+                    }
+                }
+                if (j == 37) {
+                    if (videoCardTmp[j] != null &&
+                            videoCardTmp[j].replaceAll("\\(.+\\)", "").isBlank()) {
+                        videoCardTmp[j] = "1";
+                    }
+                }
                 if (videoCardTmp[j] == null || videoCardTmp[j].isEmpty()) videoCardTmp[j] = "0";
             }
         } catch (Exception e) {
@@ -141,18 +153,20 @@ public class OnlinerVideoCardPlaceholder {
                     videoCardTmp[16],
                     Boolean.parseBoolean(videoCardTmp[17]),
                     videoCardTmp[18].replace(" pin", ""),
-                    Integer.parseInt(videoCardTmp[19].replace(" Вт", "")),
+                    Integer.parseInt(videoCardTmp[19].replace("Вт", "")
+                            .replace("Энергопотребление ", "").replace(" ", "")),
                     Integer.parseInt(videoCardTmp[20].replace(" Вт", "")),
                     videoCardTmp[21],
                     Double.parseDouble(videoCardTmp[22].replace(" слота", "")
                             .replace(" слот", "")),
-                    Integer.parseInt(videoCardTmp[23].replace(" (радиатор 2x 120 мм)", "")),
+                    Integer.parseInt(videoCardTmp[23].replaceAll("\\(.+\\)", "")
+                            .replace(" ", "").replace(" ", "")),
                     Double.parseDouble(videoCardTmp[24].replace(" мм", "")
-                            .replaceAll("\\(.+\\)", "")),
+                            .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     Double.parseDouble(videoCardTmp[25].replace(" мм", "")
                             .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     Double.parseDouble(videoCardTmp[26].replace(" мм", "")),
-                    Boolean.parseBoolean(videoCardTmp[27]),
+                    Boolean.parseBoolean(videoCardTmp[27].replace(" ", "")),
                     videoCardTmp[28],
                     Integer.parseInt(videoCardTmp[29].replaceAll("\\(.+\\)", "")),
                     Integer.parseInt(videoCardTmp[30].replaceAll("\\(.+\\)", "")
@@ -171,6 +185,7 @@ public class OnlinerVideoCardPlaceholder {
                     Integer.parseInt(videoCardTmp[38])
             );
         } catch (Exception e) {
+            System.out.println("Exception in " + url);
             e.printStackTrace();
         }
         return null;

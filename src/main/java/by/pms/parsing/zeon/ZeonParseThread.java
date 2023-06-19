@@ -21,8 +21,7 @@ public class ZeonParseThread implements Runnable {
             "korpusa",
             "materinskie_platy",
             "operativnaya_pamyat",
-            //"sistemy_ohlazhdeniya/?priceFrom=1&priceTo=1107&fp%5B119942%5D%5B%5D=%D0%BA%D1%83%D0%BB%D0%B5%D1%80+%D0%B4%D0%BB%D1%8F
-            // +%D0%BF%D1%80%D0%BE%D1%86%D0%B5%D1%81%D1%81%D0%BE%D1%80%D0%B0" //отдельный парсер под охлад
+            "sistemy_ohlazhdeniya"
     };
     private final List<Components> elements = new ArrayList<>();
     private final int controlIterator;
@@ -35,6 +34,10 @@ public class ZeonParseThread implements Runnable {
         try {
             for (int i = 1; true; i++) {
                 String tmpUrl = url + i;
+                if (controlIterator == 8) {
+                    tmpUrl += "/?priceFrom=1&priceTo=2010&fp%5B119942%5D%5B%5D=кулер+для+процессора";
+                    System.out.println("pref added");
+                }
                 Document doc = Jsoup
                         .connect(tmpUrl)
                         .timeout(5000)
@@ -44,6 +47,8 @@ public class ZeonParseThread implements Runnable {
 
                 for (int j = 0; j < content.size(); j++) {
                     String textContent = content.get(j).text();
+                    if (!textContent.contains("Кулер для процессора") && controlIterator == 8)
+                        textContent = "Кулер для процессора " + textContent;
                     if (!textContent.contains("Оперативная память") && controlIterator == 7
                             && !textContent.contains("Модуль памяти") && !textContent.contains("Память оперативная"))
                         textContent = "Оперативная память " + textContent;

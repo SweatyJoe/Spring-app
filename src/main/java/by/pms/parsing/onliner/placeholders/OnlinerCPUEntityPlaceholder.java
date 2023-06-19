@@ -51,9 +51,8 @@ public class OnlinerCPUEntityPlaceholder {
 
     private CpuEntity urlConvertToCpuEntity() {
         String[] cpuEntityTmp = new String[9];
-        CpuEntity entity = new CpuEntity();
         try {
-            Document doc = Jsoup.parse(WebDriverStarter.start(cpuUrl));
+            Document doc = Jsoup.parse(WebDriverStarter.start(cpuUrl, "c"));
             Elements allTables = doc.select("td");
             if (allTables == null) return null;
             for (int j = 0; j < 9; j++) {
@@ -62,28 +61,37 @@ public class OnlinerCPUEntityPlaceholder {
                         cpuEntityTmp[j] = allTables.get(i + 1).text();
                     }
                 }
+                if (j == 1) {
+                    if (cpuEntityTmp[j].contains("потоков")) {
+                        String[] s = cpuEntityTmp[j].replaceAll("[()]", "")
+                                .replace("потоков", "").replace("  ", " ")
+                                .split(" ");
+                        System.out.println(s.length);
+                        cpuEntityTmp[1] = s[0];
+                        cpuEntityTmp[2] = s[1];
+                        j++;
+                    }
+                }
                 if (cpuEntityTmp[j] == null) cpuEntityTmp[j] = "0";
             }
-            entity = new CpuEntity(cpuName,
+            return new CpuEntity(cpuName,
                     cpuEntityTmp[0],
                     Integer.parseInt(cpuEntityTmp[1]),
                     Integer.parseInt(cpuEntityTmp[2]),
                     Integer.parseInt(cpuEntityTmp[3].replace(" Вт", "")
                             .replace(" (макс.)", "")
-                            .replaceAll("\\(.+\\)", "")),
+                            .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     !Objects.equals(cpuEntityTmp[4], "OEM"),
                     cpuEntityTmp[5],
                     Double.parseDouble(cpuEntityTmp[6].replace(" ГГц", "")),
-                    Double.parseDouble(cpuEntityTmp[7].replace(" ГГц", "").replaceAll("\\(.+\\)", "")),
+                    Double.parseDouble(cpuEntityTmp[7].replace(" ГГц", "")
+                            .replaceAll("\\(.+\\)", "")),
                     cpuEntityTmp[8],
                     cpuUrl);
-        } catch (NumberFormatException wrongFormat) {
-            System.out.println("Wrong format exception. Exception with " + cpuName);
-            wrongFormat.printStackTrace();
         } catch (Exception e) {
-            System.out.println("Unexpected exception: ");
+            System.out.println("Exception in " + cpuUrl);
             e.printStackTrace();
         }
-        return entity;
+        return null;
     }
 }

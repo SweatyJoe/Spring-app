@@ -10,12 +10,15 @@ public class OnlinerComponentsValidating implements Runnable {
     private final SsdRepository ssdRepository;
     private final VideoCardRepository videoCardRepository;
     private final MotherboardRepository motherboardRepository;
+    private final CoolingRepository coolingRepository;
+    private final HddRepository hddRepository;
     private String item;
     private String url;
 
     public OnlinerComponentsValidating(String item, String url, CpuRepository cpuRepository, DramRepository dramRepository,
                                        PowerSupplyRepository supplyRepository, SsdRepository ssdRepository,
-                                       VideoCardRepository videoCardRepository, MotherboardRepository motherboardRepository) {
+                                       VideoCardRepository videoCardRepository, MotherboardRepository motherboardRepository,
+                                       CoolingRepository coolingRepository, HddRepository hddRepository) {
         this.item = item;
         this.url = url;
         this.cpuRepository = cpuRepository;
@@ -24,6 +27,8 @@ public class OnlinerComponentsValidating implements Runnable {
         this.ssdRepository = ssdRepository;
         this.videoCardRepository = videoCardRepository;
         this.motherboardRepository = motherboardRepository;
+        this.coolingRepository = coolingRepository;
+        this.hddRepository = hddRepository;
     }
 
     public String getItem() {
@@ -47,8 +52,14 @@ public class OnlinerComponentsValidating implements Runnable {
         if (item.contains("Видеокарта ")) {
             new OnlinerVideoCardPlaceholder(item, url, videoCardRepository);
         }
-        if(item.contains("Материнская плата ")){
+        if (item.contains("Материнская плата ")) {
             new OnlinerMotherboardPlaceholder(item, url, motherboardRepository);
+        }
+        if (item.contains("Кулер для процессора")) {
+            new OnlinerCoolingEntityPlaceholder(item, url, coolingRepository);
+        }
+        if (item.contains("Жесткий диск")) {
+            new OnlinerHddEntityPlaceholder(item, url, hddRepository);
         }
     }
 }

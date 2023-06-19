@@ -18,11 +18,11 @@ public class ZeonParseGenerator {
 
     public void parse() {
         List<ZeonParseThread> listTmpParse = new ArrayList<>();
-        for (int i = 0; i < 8; i++) {
+        for (int i = 0; i < 9; i++) {
             listTmpParse.add(new ZeonParseThread(i));
         }
-        ThreadPoolExecutor pool = new ThreadPoolExecutor(8, 20, 100,
-                TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(8), Executors.defaultThreadFactory());
+        ThreadPoolExecutor pool = new ThreadPoolExecutor(9, 20, 100,
+                TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(9), Executors.defaultThreadFactory());
         for(var s : listTmpParse){
             pool.execute(s);
         }

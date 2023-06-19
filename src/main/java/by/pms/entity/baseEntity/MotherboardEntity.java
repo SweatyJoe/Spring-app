@@ -1,9 +1,6 @@
 package by.pms.entity.baseEntity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,6 +20,7 @@ public class MotherboardEntity {
     String manufacturer;
     @NotNull
     String socket;
+    String integratedCpu;
     @NotNull
     String chipset;
     @NotNull
@@ -87,8 +85,8 @@ public class MotherboardEntity {
     int argbConnectors;
     int rgbConnectors;
 
-    int length;
-    int width;
+    double length;
+    double width;
 
     public MotherboardEntity(@NotNull String name, @NotNull String manufacturer, @NotNull String socket,
                              @NotNull String chipset, @NotNull String formFactor, boolean light,
@@ -103,7 +101,7 @@ public class MotherboardEntity {
                              int thunderbolt3, int thunderbolt4, int sPDIF, int jack35, int com,
                              int lpt, int ps2, int displayPort, int miniDisplayPort, int vga, int dvi,
                              int hdmi, int lssConnectors, int caseFanConnectors, int argbConnectors,
-                             int rgbConnectors, int length, int width) {
+                             int rgbConnectors, double length, double width, String integratedCpu) {
         this.name = name;
         this.manufacturer = manufacturer;
         this.socket = socket;
@@ -164,5 +162,6 @@ public class MotherboardEntity {
         this.rgbConnectors = rgbConnectors;
         this.length = length;
         this.width = width;
+        this.integratedCpu = integratedCpu;
     }
 }

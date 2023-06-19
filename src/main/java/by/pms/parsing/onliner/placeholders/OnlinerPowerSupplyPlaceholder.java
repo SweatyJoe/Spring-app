@@ -60,7 +60,7 @@ public class OnlinerPowerSupplyPlaceholder {
 
     private PowerSupplyEntity urlConvertToPowerSupplyEntity() {
         String[] powerEntityTmp = new String[25];
-        Document doc = Jsoup.parse(WebDriverStarter.start(url));
+        Document doc = Jsoup.parse(WebDriverStarter.start(url, "c"));
         Elements allTables = doc.select("td");
         if (allTables == null) return null;
         for (int j = 0; j < 25; j++) {
@@ -93,7 +93,7 @@ public class OnlinerPowerSupplyPlaceholder {
                     Double.parseDouble(powerEntityTmp[4].replace(" мм", "")),
                     Double.parseDouble(powerEntityTmp[5].replace(" мм", "")),
                     powerEntityTmp[6],
-                    Integer.parseInt(powerEntityTmp[7]),
+                    Integer.parseInt(powerEntityTmp[7].replaceAll("\\(.+\\)", "").replace(" ", "")),
                     Double.parseDouble(powerEntityTmp[8].replace(" А", "")
                             .replaceAll("\\(.+\\)", "")),
                     Double.parseDouble(powerEntityTmp[9].replace(" Вт", "")
@@ -115,6 +115,7 @@ public class OnlinerPowerSupplyPlaceholder {
                     Boolean.parseBoolean(powerEntityTmp[24])
             );
         } catch (Exception e) {
+            System.out.println("Exception in " + url);
             e.printStackTrace();
         }
 

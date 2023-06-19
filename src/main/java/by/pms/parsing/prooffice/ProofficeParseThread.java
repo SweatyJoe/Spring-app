@@ -53,9 +53,7 @@ public class ProofficeParseThread implements Runnable {
                                     .replace(" ", ""))));
                 }
             }
-        } catch (Exception e) {
-            System.out.println("ignore this");
-            e.printStackTrace();
+        } catch (Exception ignored) {
         }
 
     }

@@ -52,7 +52,7 @@ public class OnlinerSsdPlaceholder {
 
     private SsdEntity urlConvertToToEntity() {
         String[] ssdEntityTmp = new String[18];
-        Document doc = Jsoup.parse(WebDriverStarter.start(url));
+        Document doc = Jsoup.parse(WebDriverStarter.start(url, "c"));
         Elements allTables = doc.select("td");
         if (allTables == null) return null;
         for (int j = 0; j < 18; j++) {
@@ -65,7 +65,7 @@ public class OnlinerSsdPlaceholder {
                     if (allTables.get(i + 1).text().isEmpty()) {
                         ssdEntityTmp[j] = "0";
                     } else {
-                        if (allTables.get(i + 1).text().contains("ТБ")) {
+                        if (allTables.get(i + 1).text().contains(" ТБ")) {
                             ssdEntityTmp[j] = String.valueOf(Double.parseDouble(allTables.get(i + 1)
                                     .text().replace(" ТБ", "")) * 1000);
                             break;
@@ -86,7 +86,7 @@ public class OnlinerSsdPlaceholder {
                     ssdEntityTmp[2],
                     ssdEntityTmp[3],
                     ssdEntityTmp[4],
-                    Integer.parseInt(ssdEntityTmp[5]),
+                    Integer.parseInt(ssdEntityTmp[5].replaceAll("\\(.+\\)", "").replace(" ", "")),
                     ssdEntityTmp[6],
                     ssdEntityTmp[7],
                     Integer.parseInt(ssdEntityTmp[8].replace(" МБайт/с", "")
@@ -109,6 +109,7 @@ public class OnlinerSsdPlaceholder {
                     Boolean.parseBoolean(ssdEntityTmp[17])
             );
         } catch (Exception e) {
+            System.out.println("Exception with " + url);
             e.printStackTrace();
             return null;
         }

@@ -1,42 +1,58 @@
-function onload() {
+/*
+*  Функция скрытия кнопки удаления цпу
+ */
+function onloadbodyCpu() {
     let button = document.getElementById("restore-button")
     if (localStorage.getItem("cpu") != null) {
         button.style.visibility = "visible";
     } else button.style.visibility = "hidden";
+    return document.getElementById('container');
 }
 
-function store(id) {
-    if (localStorage.getItem("cpu") == null) {
-        localStorage.setItem("cpu", id);
-        alert("item set" + localStorage.getItem("cpu"))
-    } else alert("ЦПУ уже выбран, удалите уже выбранный и попробуйте заново.")
+function store(id, key, cost) {
+    let keyCost = key + "cost";
+    if (localStorage.getItem(key) == null) {
+        localStorage.setItem(key, id);
+        localStorage.setItem(keyCost, cost);
+        alert("Текущий компонент " + key + " id: " + localStorage.getItem(key))
+    } else if (confirm("Компонент уже выбран, удалите уже выбранный и попробуйте заново.")) {
+        localStorage.setItem(key, id);
+        localStorage.setItem(keyCost, cost);
+    }
 }
 
-function reStore() {
+/*function reStoreCpu() {
     if (localStorage.getItem("cpu") != null) {
         let button = document.getElementById("restore-button")
         button.style.visibility = "hidden";
         localStorage.removeItem("cpu");
-    } else alert("Процессор уже сброшен.")
+    } else alert("Процессор пустует.")
 }
 
-function comeBack() {
+function reStoreGpu() {
+    if (localStorage.getItem("gpu") != null) {
+        let button = document.getElementById("restore-button")
+        button.style.visibility = "hidden";
+        localStorage.removeItem("gpu");
+    } else alert("Видеокарта пустует.")
+}*/
+
+/*function comeBack() {
     location.href = "/list?"
     if (localStorage.getItem("cpu") != null) {
         location.href = "/list?cpu=" + localStorage.getItem("cpu");
         if (localStorage.getItem("gpu") != null) {
             location.href = "/list?cpu=" + localStorage.getItem("cpu") +
                 "&gpu=" + localStorage.getItem("gpu");
-            if(localStorage.getItem("Dram") != null){
+            if (localStorage.getItem("Dram") != null) {
 
             }
         }
     } else {
         location.href = "/list";
     }
-
     return location.href;
-}
+}*/
 
 //searcher
 function myFunction() {
@@ -60,40 +76,31 @@ function myFunction() {
     }
 }
 
-//filter
-function sortTable(n) {
-    var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
-    table = document.getElementById("table");
-    switching = true;
-    dir = "asc";
-    while (switching) {
-        switching = false;
-        rows = table.getElementsByTagName("TR");
-        for (i = 1; i < (rows.length - 1); i++) {
-            shouldSwitch = false;
-            x = rows[i].getElementsByTagName("TD")[n];
-            y = rows[i + 1].getElementsByTagName("TD")[n];
-            if (dir == "asc") {
-                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            } else if (dir == "desc") {
-                if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
-                    shouldSwitch = true;
-                    break;
-                }
-            }
-        }
-        if (shouldSwitch) {
-            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
-            switching = true;
-            switchcount++;
-        } else {
-            if (switchcount == 0 && dir == "asc") {
-                dir = "desc";
-                switching = true;
-            }
-        }
-    }
+function sortingByName() {
+    var items = document.querySelectorAll('.block');
+
+    // get all items as an array and call the sort method
+    Array.from(items).sort(function(a, b) {
+        // get the text content
+        a = a.querySelector('.item-name').innerHTML.toLowerCase()
+        b = b.querySelector('.item-name').innerHTML.toLowerCase()
+        return (a > b) - (a < b)
+    }).forEach(function(n, i) {
+        n.style.order = i
+    })
+
 }
+
+function sortingByPrice(){
+    var items = document.querySelectorAll('.block')
+
+    Array.from(items).sort(function(a, b) {
+        // using ~~ to cast the value to a number instead of a string
+        a = ~~a.querySelector('.product-price').innerText
+        b = ~~b.querySelector('.product-price').innerText
+        return a - b
+    }).forEach(function(n, i) {
+        n.style.order = i
+    })
+}
+

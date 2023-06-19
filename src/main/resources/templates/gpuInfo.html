@@ -1,64 +1,253 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <link rel="stylesheet" href="/defaultStyle.css">
-  <meta charset="UTF-8">
-  <script src="/js.js" th:inline="javascript"></script>
-  <title>Информация о гпу</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <script src="/js.js" th:inline="javascript"></script>
+
+    <title>Electro - HTML Ecommerce Template</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/slick-theme.css"/>
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css"/>
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="/css/style.css"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
 </head>
 <body>
-<div>
-  <div>
-    <div th:with="el = ${gpu.get()}">
-      <div>
-        <h3 th:text="${el.getName()}">Видеокарта не загрузилась =(</h3>
-        <p th:text="${el.getManufacturer()}"/>
-        <p th:text="${el.getGraphicProcessor()}"/>
-        <br>
-        <p th:text="${el.isOverclock()}"/>
-        <p th:text="${el.isBeamTracing()}"/>
-        <p th:text="${el.isLhr()}"/>
-        <p th:text="${el.isExternal()}"/>
-        <p th:text="${el.getBaseFreq()}"/>
-        <p th:text="${el.getMaxFreq()}"/>
-        <p th:text="${el.getCountStreamProcessors()}"/>
-        <p th:text="${el.getCountRTCors()}"/>
-        <p th:text="${el.getVideoMemory()}"/>
-        <p th:text="${el.getMemoryType()}"/>
-        <p th:text="${el.getMemoryFreq()}"/>
-        <p th:text="${el.getMemoryBandwidth()}"/>
-        <p th:text="${el.getMemoryBus()}"/>
-        <p th:text="${el.getDirectX()}"/>
-        <p th:text="${el.isSli()}"/>
-        <p th:text="${el.getConnectors()}"/>
-        <p th:text="${el.getEnergyConsumption()}"/>
-        <p th:text="${el.getRecommendedPower()}"/>
-        <p th:text="${el.getColling()}"/>
-        <p th:text="${el.getThicknessCooling()}"/>
-        <p th:text="${el.getFansCount()}"/>
-        <h3>Габариты</h3>
-        <p th:text="${el.getLength()}"/>
-        <p th:text="${el.getHeight()}"/>
-        <p th:text="${el.getThickness()}"/>
-        <p th:text="${el.isLowProfile()}"/>
-        <h3>Коннекторы</h3>
-        <p th:text="${el.getVga()}"/>
-        <p th:text="${el.getDvi()}"/>
-        <p th:text="${el.getHdmi()}"/>
-        <p th:text="${el.getHdmiVersion()}"/>
-        <p th:text="${el.getDisplayPort()}"/>
-        <p th:text="${el.getDisplayPortVersion()}"/>
-        <p th:text="${el.getMiniDisplayPort()}"/>
-        <p th:text="${el.getVESAStereo()}"/>
-        <p th:text="${el.getUsbTypeC()}"/>
-        <br>
-        <p th:text="${el.getSubFunctions()}"/>
-        <br>
-        <a class="button" href="/findCpu">Назад</a>
-        <a class="button" href="" th:attr="onclick=|store('${el.getId}')|">Выбрать</a>
-      </div>
+<header>
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="#" class="logo">
+                            <img src="./img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <input class="input" placeholder="Search here">
+                            <button class="search-btn">Поиск</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
     </div>
-  </div>
+    <!-- /MAIN HEADER -->
+</header>
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="/findCpu">Процессоры</a></li>
+                <li><a href="#">Материнские платы</a></li>
+                <li class="active"><a href="#">Видеокарты</a></li>
+                <li><a href="#">Оперативная память</a></li>
+                <li><a href="#">Системы охлаждения</a></li>
+                <li><a href="#">Блоки питания</a></li>
+                <li><a href="#">Жесткие диски</a></li>
+                <li><a href="#">Твердотельные накопители</a></li>
+                <li><a href="#">Корпуса</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- Product main img -->
+            <!--<div class="col-md-5 col-md-push-2">
+                <div id="product-main-img">
+                    <div class="product-preview">
+                        <img src="./img/product01.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product03.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product06.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product08.png" alt="">
+                    </div>
+                </div>
+            </div>-->
+            <!-- /Product main img -->
+
+            <!-- Product thumb imgs -->
+            <!--<div class="col-md-2  col-md-pull-5">
+                <div id="product-imgs">
+                    <div class="product-preview">
+                        <img src="./img/product01.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product03.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product06.png" alt="">
+                    </div>
+
+                    <div class="product-preview">
+                        <img src="./img/product08.png" alt="">
+                    </div>
+                </div>
+            </div>-->
+            <!-- /Product thumb imgs -->
+
+            <!-- Product details -->
+            <div class="col-md-5">
+                <div class="product-details">
+                    <div th:with="el = ${gpu.get()}">
+                        <div>
+                            <h2 class="product-name" th:text="${el.getName()}">Процессор не загрузился =(</h2>
+                            <p th:text="'Производитель графического чипа: ' + ${el.getManufacturer()}"/>
+                            <p th:text="'Графический чип:' + ${el.getGraphicProcessor()}"/>
+                            <br>
+                            <p th:text="'Разогнанная версия: '+${el.isOverclock()}"/>
+                            <p th:text="'Трассировка лучей: '+${el.isBeamTracing()}"/>
+                            <p th:text="'Защита от майнинга (LHR): '+${el.isLhr()}"/>
+                            <p th:text="'Внешняя: '+${el.isExternal()}"/>
+                            <p th:text="'Базовая частота графического процессора: '+${el.getBaseFreq()}"/>
+                            <p th:text="'Максимальная частота графического процессора: '+${el.getMaxFreq()}"/>
+                            <p th:text="'Количество потоковых процессоров: '+${el.getCountStreamProcessors()}"/>
+                            <p th:text="'Количество RT-ядер: '+${el.getCountRTCors()}"/>
+                            <p th:text="'Количество видеопамяти: '+${el.getVideoMemory()}"/>
+                            <p th:text="'Тип памяти: '+${el.getMemoryType()}"/>
+                            <p th:text="'Частота помяти: '+${el.getMemoryFreq()}"/>
+                            <p th:text="'Пропускная способность памяти: '+${el.getMemoryBandwidth()}"/>
+                            <p th:text="'Шина памяти: '+${el.getMemoryBus()}"/>
+                            <p th:text="'Поддержка DirectX: '+${el.getDirectX()}"/>
+                            <p th:text="'Поддержка SLI: '+${el.isSli()}"/>
+                            <p th:text="'Разьём питания: '+${el.getConnectors()}"/>
+                            <p th:text="'Энергопотребление: '+${el.getEnergyConsumption()}"/>
+                            <p th:text="'Рекомендуемый блок питания: '+${el.getRecommendedPower()}"/>
+                            <p th:text="'Тип охлаждения: '+${el.getColling()}"/>
+                            <p th:text="'Толщина системы охлаждения: '+${el.getThicknessCooling()}"/>
+                            <p th:text="'Количество вентиляторов: '+${el.getFansCount()}"/>
+                            <h3>Габариты</h3>
+                            <p th:text="'Длинна видеокарты: '+${el.getLength()}"/>
+                            <p th:text="'Высота видеокарты: '+${el.getHeight()}"/>
+                            <p th:text="'Толщина видеокарты: '+${el.getThickness()}"/>
+                            <p th:text="'Низкопрофильная: '+${el.isLowProfile()}"/>
+                            <h3>Интерфейсы подключения</h3>
+                            <p th:text="'VGA(D-Sub): '+${el.getVga()}"/>
+                            <p th:text="'DVI: '+${el.getDvi()}"/>
+                            <p th:text="'HDMI: '+${el.getHdmi()}"/>
+                            <p th:text="'Версия HDMI: '+${el.getHdmiVersion()}"/>
+                            <p th:text="'miniHDMI: '+${el.getMiniHdmi()}"></p>
+                            <p th:text="'DisplayPort: '+${el.getDisplayPort()}"/>
+                            <p th:text="'Версия DisplayPort: '+${el.getDisplayPortVersion()}"/>
+                            <p th:text="'mini DisplayPort: '+${el.getMiniDisplayPort()}"/>
+                            <p th:text="'VESA Stereo: '+${el.getVESAStereo()}"/>
+                            <p th:text="'USB Type-C: '+${el.getUsbTypeC()}"/>
+                            <br>
+                            <p th:text="'Дополнительная информация: '+${el.getSubFunctions()}"/>
+
+                            <!--<a class="button" href="/findCpu">Назад</a>-->
+
+                        </div>
+                        <br>
+                        <!--<h3 class="product-price">$980.00 </h3>-->
+                        <th:block th:unless="${costzeon.isEmpty()}">
+                            <p th:if="${costzeon.isEmpty()}" style="visibility: hidden">[</p>
+                            <tr th:with="items = ${costzeon.get()}">
+                                <td th:text="Zeon"></td>
+                                <td><span class="product-price" th:text="${items.getCost()}"/></td>
+                                <td><a th:href="${items.getUrl()}">Url</a></td>
+                                <div class="add-to-cart">
+                                    <a href="" th:attr="onclick=|store('${el.getId}', 'gpu', '${items.getCost()}')|"
+                                       class="add-to-cart-btn"><i
+                                            class="fa fa-shopping-cart"></i>Выбрать видеокарту</a>
+                                </div>
+                            </tr>
+                        </th:block>
+                        <th:block th:unless="${costpro.isEmpty()}">
+                            <tr th:with="itempro = ${costpro.get()}">
+                                <td th:text="Prooffice"></td>
+                                <td><span class="product-price" th:text="${itempro.getCost()}"/></td>
+                                <td><a th:href="${itempro.getUrl()}">Url</a></td>
+                                <div class="add-to-cart">
+                                    <a href="" th:attr="onclick=|store('${el.getId}', 'gpu', '${items.getCost()}')|"
+                                       class="add-to-cart-btn"><i
+                                            class="fa fa-shopping-cart"></i>Выбрать видеокарту</a>
+                                </div>
+                            </tr>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+            <!-- /Product details -->
+        </div>
+    </div>
 </div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/slick.min.js"></script>
+<script src="/js/nouislider.min.js"></script>
+<script src="/js/jquery.zoom.min.js"></script>
+<script src="/js/main.js"></script>
+
 </body>
 </html>

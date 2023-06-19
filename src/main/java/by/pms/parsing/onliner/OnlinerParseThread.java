@@ -22,7 +22,7 @@ public class OnlinerParseThread implements Runnable {
             "chassis",
             "motherboard",
             "dram",
-            "fan?type_fan%5B0%5D=cpu&type_fan%5Boperation%5D=union&order=price:asc&"
+            "fan?type_fan%5B0%5D=cpu&type_fan%5Boperation%5D=union"
     };
     private static final Map<String, String> CPUElements = new HashMap<>();
     private int componentId = 1;
@@ -32,6 +32,9 @@ public class OnlinerParseThread implements Runnable {
     }
 
     private static String urlGen(int pageNumber, String component) {
+        if(component.equals("fan?type_fan%5B0%5D=cpu&type_fan%5Boperation%5D=union")){
+            return "https://catalog.onliner.by/" + component + "&page=" + pageNumber;
+        }
         return "https://catalog.onliner.by/" + component + "?page=" + pageNumber;
     }
 
@@ -45,7 +48,7 @@ public class OnlinerParseThread implements Runnable {
             int pageIterator = 1;
             int lastPage = 2;
             for (; pageIterator < lastPage + 1; pageIterator++) {
-                Document doc = Jsoup.parse(WebDriverStarter.start(urlGen(pageIterator, components[componentId])));
+                Document doc = Jsoup.parse(WebDriverStarter.start(urlGen(pageIterator, components[componentId]), "p"));
                 Elements images = doc.select("div.schema-product__image");
                 Elements elements = doc.select("a.js-product-title-link"); //js-product-title-link  //schema-product__group
                 Elements elementsIterator = doc.select("a.schema-pagination__pages-link");

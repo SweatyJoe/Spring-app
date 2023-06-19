@@ -38,7 +38,7 @@ public class OnlinerDramEntityPlaceholder {
 
     private DramEntity urlConvertToEntity() {
         String[] dramEntityTmp = new String[14];
-        Document doc = Jsoup.parse(WebDriverStarter.start(url));
+        Document doc = Jsoup.parse(WebDriverStarter.start(url, "c"));
         Elements allTables = doc.select("td");
         try {
             for (int j = 0; j < 14; j++) {
@@ -74,7 +74,8 @@ public class OnlinerDramEntityPlaceholder {
                     Boolean.parseBoolean(dramEntityTmp[4]),
                     Integer.parseInt(dramEntityTmp[5].replace(" МГц", "")),
                     dramEntityTmp[6],
-                    Double.parseDouble(dramEntityTmp[7].replace("T", "")),
+                    Double.parseDouble(dramEntityTmp[7].replace("T", "")
+                            .replaceAll("\\(.+\\)", "").replace(" ", "")),
                     dramEntityTmp[8],
                     Double.parseDouble(dramEntityTmp[9].replace(" В", "")),
                     Double.parseDouble(dramEntityTmp[10].replace("(", "")
@@ -86,6 +87,7 @@ public class OnlinerDramEntityPlaceholder {
                     dramEntityTmp[13]
             );
         } catch (Exception e) {
+            System.out.println("Exception in " + url);
             e.printStackTrace();
         }
         return null;

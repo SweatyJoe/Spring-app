@@ -1,39 +1,354 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link href="/defaultStyle.css" rel="stylesheet">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="/js.js" th:inline="javascript"></script>
-</head>
-<body onload="onStartCheckComponents()">
-<div>
-    <div>
-        <div th:with="cpuel = ${cpu?.get()}">
-            <p th:text="${cpuel?.getName()}"></p>
-        </div>
-        <a class="button" type="button" href="/findCpu">Найти ЦПУ</a>
-    </div>
-    <div>
-        <div>
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
+    <title>Electro - HTML Ecommerce Template</title>
+
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css"/>
+
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/css/slick-theme.css"/>
+
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css"/>
+
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="/css/style.css"/>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body onload="onLoadBody()">
+<!-- HEADER -->
+<header>
+    <!-- TOP HEADER -->
+
+    <!-- MAIN HEADER -->
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="/" class="logo">
+                            <img src="/img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <!--<div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <input class="input" placeholder="Search here">
+                            <button class="search-btn">Search</button>
+                        </form>
+                    </div>
+                </div>-->
+                <!-- /SEARCH BAR -->
+
+                <!-- ACCOUNT -->
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+
+                        <!-- /Menu Toogle -->
+                    </div>
+                </div>
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- row -->
         </div>
-        <a class="button" href="#">Найти материнскую плату</a>
+        <!-- container -->
     </div>
-    <div>
-        <div th:with="videl = ${gpu?.get()}">
-            <p th:text="${videl?.getName()}"></p>
+    <!-- /MAIN HEADER -->
+</header>
+<!-- /HEADER -->
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/findCpu">Процессоры</a></li>
+                <li><a href="/allMB">Материнские платы</a></li>
+                <li><a href="/allGpu">Видеокарты</a></li>
+                <li><a href="/allDDR">Оперативная память</a></li>
+                <li><a href="/allCooling">Системы охлаждения</a></li>
+                <li><a href="/allPower">Блоки питания</a></li>
+                <li><a href="#">Жесткие диски</a></li>
+                <li><a href="#">Твердотельные накопители</a></li>
+                <li><a href="#">Корпуса</a></li>
+            </ul>
+            <!-- /NAV -->
         </div>
-        <a class="button" href="#">Найти видеокарту</a>
+        <!-- /responsive-nav -->
     </div>
+    <!-- /container -->
+</nav>
+
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+
+            <!-- Order Details -->
+            <div class="col-md-12 order-details">
+                <div class="section-title text-center">
+                    <h3 class="title">Ваша сборка</h3>
+                </div>
+                <div class="order-summary">
+                    <div class="order-col">
+                        <div><strong>Компонент</strong></div>
+                    </div>
+                    <div class="order-products">
+                        <div class="order-col">
+                            <div><a id="cpu-name">Процессор не выбран</a></div>
+                            <div id="cpu-price" align="right"></div>
+                            <div>
+                                <a href="/findCpu" class="primary-btn ">Процессоры</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="gpu-name">Видеокарта не выбрана</a></div>
+                            <div id="gpu-cost" align="right"></div>
+                            <div>
+                                <a href="/allGpu" class="primary-btn ">Видеокарты</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="mb-name">Материнская плата не выбрана</a></div>
+                            <div id="mb-cost" align="right"></div>
+                            <div>
+                                <a href="/allMB" class="primary-btn ">Материнские платы</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="cool-name">Охлаждение не выбрано</a></div>
+                            <div id="cool-cost" align="right"></div>
+                            <div>
+                                <a href="/allCooling" class="primary-btn ">Охлаждения</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="ddr-name">Оперативная память не выбрана</a></div>
+                            <div id="ddr-cost" align="right"></div>
+                            <div>
+                                <a href="/allDDR" class="primary-btn ">Оперативная память</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="bp-name">Блок питания не выбран</a></div>
+                            <div id="bp-cost" align="right"></div>
+                            <div>
+                                <a href="/allPower" class="primary-btn ">Блоки питания</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="ssd-name">SSD не выбран</a></div>
+                            <div id="ssd-cost" align="right"></div>
+                            <div>
+                                <a href="" class="primary-btn ">SSD диски</a>
+                            </div>
+                        </div>
+                        <div class="order-col">
+                            <div><a id="hdd-name">HDD не выбран</a></div>
+                            <div id="hdd-cost" align="right"></div>
+                            <div>
+                                <a href="" class="primary-btn ">HDD диски</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="order-col">
+                        <div><strong>TOTAL</strong></div>
+                        <div><strong class="order-total" id="total-cost">$2940.00</strong></div>
+                    </div>
+                </div>
+
+
+                <a href="/" class="primary-btn order-submit" onclick="restore()">Очистить список</a>
+            </div>
+            <!-- /Order Details -->
+        </div>
+        <!-- /row -->
+    </div>
+    <!-- /container -->
 </div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/slick.min.js"></script>
+<script src="/js/nouislider.min.js"></script>
+<script src="/js/jquery.zoom.min.js"></script>
+<script src="/js/main.js"></script>
+
 </body>
-<script th:inline="javascript">
-    function onStartCheckComponents(){
-        let url = comeBack();
-        if(window.location.href.length !== url.length){
-            location.href = url;
-        }
+<script>
+    function restore() {
+        localStorage.clear();
     }
+
+    let gpuCost = document.getElementById('gpu-cost');
+    let gpuName = document.getElementById('gpu-name');
+    let cpuName = document.getElementById('cpu-name');
+    let cpuCost = document.getElementById('cpu-price');
+    let mbName = document.getElementById('mb-name');
+    let mbCost = document.getElementById('mb-cost');
+    let coolName = document.getElementById('cool-name');
+    let coolCost = document.getElementById('cool-cost');
+    let ddrName = document.getElementById('ddr-name');
+    let ddrCost = document.getElementById('ddr-cost');
+    let powerCost = document.getElementById('bp-cost');
+    let powerName = document.getElementById('bp-name');
+    let ssdCost = document.getElementById('ssd-cost');
+    let ssdName = document.getElementById('ssd-name');
+
+    function onLoadBody() {
+        if (localStorage.getItem('cpucost') != null)
+            cpuCost.textContent = localStorage.getItem('cpucost') + " руб.";
+        if (localStorage.getItem('gpucost') != null)
+            gpuCost.textContent = localStorage.getItem('gpucost') + " руб.";
+        if (localStorage.getItem('mbcost') != null)
+            mbCost.textContent = localStorage.getItem('mbcost') + " руб.";
+        if (localStorage.getItem('coolcost') != null)
+            coolCost.textContent = localStorage.getItem('coolcost') + " руб.";
+        if (localStorage.getItem('ddrcost') != null)
+            ddrCost.textContent = localStorage.getItem('ddrcost') + " руб.";
+        if (localStorage.getItem('powercost') != null)
+            powerCost.textContent = localStorage.getItem('powercost') + " руб.";
+        if (localStorage.getItem('ssdcost') != null)
+            ssdCost.textContent = localStorage.getItem('ssdcost') + " руб.";
+        let gpuId = localStorage.getItem('gpu');
+        let cpuId = localStorage.getItem('cpu');
+        let mbId = localStorage.getItem('mb');
+        let coolId = localStorage.getItem('cool');
+        let ddrId = localStorage.getItem('ddr');
+        let bpId = localStorage.getItem('power');
+        let ssdId = localStorage.getItem('ssd');
+        let hddId = localStorage.getItem('hdd');
+        if (gpuId != null) {
+            let req = new Request('get/gpu?id=' + gpuId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    gpuName.innerHTML = '';
+                    gpuName.innerHTML = text;
+                    gpuName.href = "/gpuInfo/" + gpuId;
+                })
+        } else console.log("gpu is null")
+        if (cpuId != null) {
+            let req = new Request('get/cpu?id=' + cpuId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    cpuName.innerHTML = '';
+                    cpuName.innerHTML = text;
+                    cpuName.href = "/cpuInfo/" + cpuId;
+                })
+        } else console.log("cpu is null")
+        if (mbId != null) {
+            let req = new Request('get/mb?id=' + mbId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    mbName.innerHTML = '';
+                    mbName.innerHTML = text;
+                    mbName.href = "/mbInfo/" + mbId;
+                })
+        }
+        if (coolId != null) {
+            let req = new Request('get/cooling?id=' + coolId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    coolName.innerHTML = '';
+                    coolName.innerHTML = text;
+                    coolName.href = "/coolingInfo/" + coolId;
+                })
+        }
+        if (ddrId != null) {
+            let req = new Request('get/dram?id=' + ddrId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    ddrName.textContent = text;
+                    ddrName.href = "/ddrInfo/" + ddrId;
+                })
+        }
+        if (bpId != null) {
+            let req = new Request('get/power?id=' + bpId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    powerName.innerHTML = text;
+                    powerName.href = "/powerInfo/" + bpId;
+                })
+        }
+        if (ssdId != null) {
+            let req = new Request('get/ssd?id=' + ssdId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    ssdName.innerHTML = text;
+                    ssdName.href = "/ssdInfo/" + ssdId;
+                })
+        }
+        if (hddId != null) {
+            let req = new Request('get/hdd?id=' + hddId);
+            fetch(req)
+                .then((response) => response.text())
+                .then((text) => {
+                    hddName.innerHTML = text;
+                    hddName.href = "/hddInfo/" + hddId;
+                })
+        }
+        let total = document.getElementById('total-cost');
+        total.textContent = String((Number(localStorage.getItem('cpucost')) +
+                Number(localStorage.getItem('gpucost')) +
+                Number(localStorage.getItem('mbcost')) +
+                Number(localStorage.getItem('ddrcost')) +
+                Number(localStorage.getItem('powercost')) +
+                Number(localStorage.getItem('ssdcost')) +
+                Number(localStorage.getItem('hddcost')) +
+                Number(localStorage.getItem('coolcost'))).toFixed(2)) +
+            " руб.";
+    }
+
 </script>
 </html>

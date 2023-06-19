@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Electro</title>
+    <script src="/js.js" th:inline="javascript"></script>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <link type="text/css" rel="stylesheet" href="css/bootstrap.min.css"/>
+
+    <link type="text/css" rel="stylesheet" href="css/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="css/slick-theme.css"/>
+
+    <link type="text/css" rel="stylesheet" href="css/nouislider.min.css"/>
+
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    <link type="text/css" rel="stylesheet" href="css/style.css"/>
+
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <!--[endif]-->
+
+</head>
+<body onload="">
+<header>
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="#" class="logo">
+                            <img src="./img/logo.png" alt="">
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <input class="input" placeholder="Search here">
+                            <button class="search-btn">Поиск</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- /MAIN HEADER -->
+</header>
+<!-- /HEADER -->
+
+<!-- NAVIGATION -->
+<nav id="navigation">
+    <!-- container -->
+    <div class="container">
+        <!-- responsive-nav -->
+        <div id="responsive-nav">
+            <!-- NAV -->
+            <ul class="main-nav nav navbar-nav">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Процессоры</a></li>
+                <li class="active"><a href="#">Материнские платы</a></li>
+                <li><a href="#">Видеокарты</a></li>
+                <li><a href="#">Оперативная память</a></li>
+                <li><a href="#">Системы охлаждения</a></li>
+                <li><a href="#">Блоки питания</a></li>
+                <li><a href="#">Жесткие диски</a></li>
+                <li><a href="#">Твердотельные накопители</a></li>
+                <li><a href="#">Корпуса</a></li>
+            </ul>
+            <!-- /NAV -->
+        </div>
+        <!-- /responsive-nav -->
+    </div>
+    <!-- /container -->
+</nav>
+<!-- /NAVIGATION -->
+<!-- SECTION -->
+<div class="section">
+    <!-- container -->
+    <div class="container">
+        <!-- row -->
+        <div class="row">
+            <!-- ASIDE -->
+            <div id="aside" class="col-md-3">
+                <!-- aside Widget -->
+                <div class="aside">
+                    <h3 class="aside-title">Производитель</h3>
+
+                    <div class="checkbox-filter">
+                        <div class="input-checkbox">
+                            <input type="checkbox" id="category-3">
+                            <label for="category-3">
+                                <span></span>
+                                Nvidia
+                            </label>
+                        </div>
+                        <div class="input-checkbox">
+                            <input type="checkbox" id="category-1">
+                            <label for="category-1">
+                                <span></span>
+                                AMD
+                            </label>
+                        </div>
+                        <div class="input-checkbox">
+                            <input type="checkbox" id="category-2">
+                            <label for="category-2">
+                                <span></span>
+                                Intel
+                            </label>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- /ASIDE -->
+            <div class="col-md-9">
+                <div class="header-search">
+                    <form>
+                        <button id="restore-button" class="btn-danger" onclick="reStoreGpu()">Удалить охлаждение из
+                            избранного
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <!-- STORE -->
+            <div id="store" class="col-md-9">
+
+                <div class="row" id="container">
+                    <!-- product -->
+                    <div th:each="el : ${ipce}" id="block">
+                        <div class="col-md-4 col-xs-6">
+                            <div class="product" th:with="idNaw=${el.getId()} "
+                                 th:href="@{/mbInfo/{id}(id = ${el.getId()})}" th:method="post">
+                                <div class="product-img">
+                                    <img src="./img/product01.png" alt="">
+                                </div>
+                                <div class="product-body">
+                                    <p class="product-category" th:text="'id ' + ${el.getId()}">id</p>
+                                    <h3 class="product-name"><a th:href="@{/coolingInfo/{id}(id = ${el.getId()})}"
+                                                                th:method="post"
+                                                                th:text="${el.getName()}">Охлаждение</a>
+                                    </h3>
+                                    <h4 class="product-price" th:text="'От ' +${prices.get(el.getId())} + ' Руб.'">
+                                        $980.00</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix visible-sm visible-xs"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/slick.min.js"></script>
+<script src="/js/nouislider.min.js"></script>
+<script src="/js/jquery.zoom.min.js"></script>
+<script src="/js/main.js"></script>
+<script>
+
+    const sortCheckBoxCategory1 = document.getElementById('category-1');
+    const sortCheckBoxCategory2 = document.getElementById('category-2');
+    sortCheckBoxCategory2.addEventListener('change', filterIntel);
+    sortCheckBoxCategory1.addEventListener('change', filterAmd);
+    const block = container.querySelectorAll('#block')
+
+    function filterAmd() {
+        const amdBlocks = [];
+        for (let i = 0; i < block.length; i++) {
+            const blockText = block[i].textContent;
+            if (blockText.toLowerCase().includes('radeon')) {
+                amdBlocks.push(block[i]);
+            }
+        }
+        if (sortCheckBoxCategory1.checked) {
+            container.innerHTML = '';
+            for (let i = 0; i < amdBlocks.length; i++) {
+                container.appendChild(amdBlocks[i]);
+            }
+        } else {
+            container.innerHTML = '';
+            for (let i = 0; i < block.length; i++) {
+                container.appendChild(block[i]);
+            }
+        }
+    }
+
+    function filterIntel() {
+        const intelBlocks = [];
+        for (let i = 0; i < block.length; i++) {
+            const blockText = block[i].textContent;
+            if (blockText.toLowerCase().includes('intel')) {
+                intelBlocks.push(block[i]);
+            }
+        }
+        if (sortCheckBoxCategory2.checked) {
+            container.innerHTML = '';
+            for (let i = 0; i < intelBlocks.length; i++) {
+                container.appendChild(intelBlocks[i]);
+            }
+        } else {
+            container.innerHTML = '';
+            for (let i = 0; i < block.length; i++) {
+                container.appendChild(block[i]);
+            }
+        }
+    }
+</script>
+
+</body>
+</html>
